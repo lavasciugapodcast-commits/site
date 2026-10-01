@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sport — Lavasciuga</title>
+  <meta name="description" content="Lo sport secondo Lavasciuga: rubriche, risultati e commenti.">
+  <link rel="icon" href="assets/logo-64.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/logo-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Tema scelto col pulsante sole/luna: applicato prima del disegno per evitare il lampo -->
+  <script>(function(){var r=document.documentElement,t=null;try{t=localStorage.getItem('tema')}catch(e){}if(t==='light'||t==='dark')r.dataset.theme=t;else t=null;if(t?t==='dark':matchMedia('(prefers-color-scheme: dark)').matches)r.classList.add('is-dark')})();</script>
+</head>
+<body>
+  <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="brand" aria-label="Lavasciuga, torna alla home">
+        <img class="brand-logo" src="assets/logo-512.png" alt="Logo di Lavasciuga: un cervello mezzo immerso nell'acqua dentro l'oblò di una lavatrice" width="136" height="136">
+        <span>
+          <span class="brand-name">LAVASCIUGA</span>
+          <span class="brand-sub">Podcast · Blog · Sport</span>
+        </span>
+      </a>
+      <nav class="main-nav" id="menu" aria-label="Navigazione principale">
+        <ul>
+          <li><a href="podcast.html">Podcast</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="sport.html">Sport</a></li>
+          <li><a href="news.html">News</a></li>
+          <li><a href="contatti.html">Contatti</a></li>
+          <li><a href="about.html">About</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <button class="theme-toggle" type="button" aria-label="Passa al tema scuro">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2.5M12 20v2.5M1.5 12H4M20 12h2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg>
+        </button>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu" aria-label="Apri il menu"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="contenuto" class="container">
+        <section class="page-head">
+          <span class="kicker">03 — Sport</span>
+          <h1>Sport</h1>
+          <p class="lead">Rubriche, risultati e commenti, senza prendersi troppo sul serio.</p>
+        </section>
+
+        <!-- TODO: contenuto reale -->
+        <section class="block">
+          <div class="block-head"><h2>Rubriche</h2></div>
+          <ul class="entries">
+            <li class="entry">
+              <span class="meta">Ogni lunedì</span>
+              <h3><a href="#">Il weekend sportivo</a></h3>
+              <p>Commenti, pagelle e opinioni sul weekend di sport.</p>
+            </li>
+            <li class="entry">
+              <span class="meta">Rubrica</span>
+              <h3><a href="#">Titolo della rubrica</a></h3>
+              <p>Breve descrizione della rubrica.</p>
+            </li>
+          </ul>
+        </section>
+
+        <footer class="site-footer">
+          <span>&copy; <span id="year"></span> Lavasciuga</span>
+          <!-- TODO: contenuto reale (link social) -->
+          <ul>
+            <li><a href="https://www.spreaker.com/podcast/lavasciuga--6470341">Spreaker</a></li>
+            <li><a href="#">Instagram</a></li>
+            <li><a href="#">YouTube</a></li>
+            <li><a href="#">Spotify</a></li>
+          </ul>
+        </footer>
+    </main>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
