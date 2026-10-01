@@ -90,7 +90,7 @@ img { max-width: 100%; display: block; }
 }
 .header-inner {
   height: var(--header-h);
-  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
 }
 
 .brand {
@@ -118,14 +118,20 @@ img { max-width: 100%; display: block; }
   color: var(--teal);
 }
 
-.main-nav ul { list-style: none; display: flex; gap: 4px; }
+.main-nav ul { list-style: none; display: flex; gap: 2px; }
 .main-nav a {
-  display: block; padding: 8px 12px;
+  display: block; padding: 8px 10px;
   color: var(--on-charcoal); text-decoration: none;
   font-weight: 800; font-stretch: 110%; font-size: 1rem; letter-spacing: 0.02em;
 }
 .main-nav a:hover { color: var(--charcoal); background: var(--teal); }
 .main-nav a[aria-current="page"] { background: var(--pink); color: var(--charcoal); }
+
+/* "Sostieni" (Ko-fi): ultimo elemento del menu, sempre turchese */
+.main-nav .nav-cta { margin-left: 8px; }
+.main-nav .nav-cta a { display: flex; align-items: center; gap: 6px; background: var(--teal); color: var(--charcoal); }
+.main-nav .nav-cta a:hover { background: var(--pink); }
+.main-nav .nav-cta svg { width: 18px; height: 18px; flex-shrink: 0; }
 
 /* Pulsante sole/luna: mostra la luna in chiaro (passa a scuro) e il sole in scuro */
 .theme-toggle {
@@ -191,6 +197,40 @@ main { padding-bottom: 64px; }
 .prose { max-width: 62ch; }
 .prose p + p { margin-top: 1em; }
 .prose h2 { margin: 1.6em 0 0.4em; font-weight: 800; font-stretch: 110%; font-size: 1.4rem; }
+
+/* ---------- Articolo del blog (blog/*.html) ---------- */
+.article-head h1 { font-size: clamp(2.2rem, 6vw, 3.8rem); }
+.article-head .kicker a { color: inherit; }
+.article-meta { margin-top: 18px; font: 500 0.8rem var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.article .note { margin-top: 28px; }
+.article .prose { padding-top: 32px; font-size: 1.15rem; line-height: 1.75; }
+.prose ul { margin: 1em 0; padding: 0; list-style: none; }
+.prose li { position: relative; padding-left: 1.4em; }
+.prose li + li { margin-top: 0.5em; }
+.prose li::before {
+  content: ""; position: absolute; left: 0; top: 0.68em;
+  width: 0.5em; height: 0.5em; background: var(--teal);
+}
+.prose blockquote {
+  margin: 1.6em 0; padding: 4px 0 4px 22px;
+  border-left: 6px solid var(--pink);
+  font-weight: 800; font-stretch: 105%; font-size: 1.55rem; line-height: 1.3;
+}
+.prose a { font-weight: 600; }
+
+.related {
+  max-width: 62ch; margin-top: 48px; padding: 20px;
+  border: 2px solid var(--line); background: var(--paper-2);
+}
+.related-title { margin: 8px 0 14px; font-weight: 800; font-size: 1.15rem; line-height: 1.3; }
+.related-num { font: 500 1rem var(--mono); color: var(--teal-ink); margin-right: 6px; }
+.related-link {
+  display: inline-block; padding: 8px 14px;
+  background: var(--pink); color: var(--charcoal); text-decoration: none;
+  font: 700 0.8rem var(--mono); letter-spacing: 0.08em; text-transform: uppercase;
+}
+.related-link:hover { background: var(--teal); color: var(--charcoal); }
+.back { margin-top: 32px; font: 500 0.85rem var(--mono); letter-spacing: 0.06em; text-transform: uppercase; }
 
 /* ---------- Liste "editoriali" ---------- */
 .entries { list-style: none; }
@@ -260,7 +300,8 @@ main { padding-bottom: 64px; }
   padding: 8px 0; width: 6.5rem; text-align: center; text-decoration: none; cursor: pointer;
 }
 .ep-play:hover { background: var(--teal); border-color: var(--teal); color: var(--charcoal); }
-.episode.is-current .ep-play { background: var(--pink); border-color: var(--pink); color: var(--charcoal); }
+.episode.is-open .ep-play { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.episode.is-open .ep-play:hover { background: var(--teal); border-color: var(--teal); color: var(--charcoal); }
 .episode.is-current .ep-num { color: var(--pink-deep); }
 .episode.is-current h3 { color: var(--pink-deep); }
 
@@ -281,7 +322,7 @@ main { padding-bottom: 64px; }
 /* ---------- Player del podcast (generato da js/podcast.js) ---------- */
 .lv-player {
   display: grid; grid-template-columns: 132px minmax(0, 1fr);
-  grid-template-areas: "cover head" "cover deck" "cover controls" "error error";
+  grid-template-areas: "cover head" "cover deck" "cover controls" "desc desc" "error error";
   gap: 0 24px; align-items: start;
   padding: 20px; border: 2px solid var(--line); background: var(--paper-2);
 }
@@ -314,6 +355,33 @@ main { padding-bottom: 64px; }
 .lv-btn:hover { background: var(--teal); border-color: var(--teal); color: var(--charcoal); }
 .lv-time { margin-left: auto; font: 500 0.85rem var(--mono); font-variant-numeric: tabular-nums; color: var(--muted); }
 .lv-ext { font: 500 0.75rem var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
+/* Versione compatta, aperta sotto una riga dell'elenco episodi */
+.lv-player.lv-player--inline {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "deck" "controls" "desc" "error";
+  padding: 16px;
+}
+.lv-player--inline .lv-deck { margin-top: 0; }
+.ep-panel { grid-column: 1 / -1; margin-top: 14px; }
+
+/* Descrizione dell'episodio (dall'API di Spreaker) */
+.lv-desc { grid-area: desc; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line-soft); }
+.lv-desc-label { display: block; margin-bottom: 6px; font: 500 0.75rem var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.lv-desc-text { position: relative; max-width: 68ch; max-height: 9.6em; overflow: hidden; font-size: 0.98rem; line-height: 1.6; overflow-wrap: anywhere; }
+.lv-desc-text p + p { margin-top: 0.7em; }
+.lv-desc-text.is-clamped::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3em;
+  background: linear-gradient(to bottom, transparent, var(--paper-2));
+}
+.lv-desc.is-expanded .lv-desc-text { max-height: none; }
+.lv-desc.is-expanded .lv-desc-text::after { display: none; }
+.lv-more {
+  margin-top: 8px; padding: 0; background: none; border: 0; cursor: pointer;
+  color: var(--teal-ink); font: 500 0.78rem var(--mono); letter-spacing: 0.08em; text-transform: uppercase;
+  text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px;
+}
+.lv-more:hover { color: var(--pink-deep); }
+
 .lv-error { grid-area: error; margin-top: 14px; padding: 10px 12px; border-left: 5px solid var(--pink); background: var(--paper); }
 
 /* Mini barra fissa in basso, stessa pelle dell'header: antracite con riga turchese */
@@ -342,8 +410,50 @@ main { padding-bottom: 64px; }
 .lv-mini-time { flex-shrink: 0; font: 400 0.8rem var(--mono); font-variant-numeric: tabular-nums; color: var(--on-charcoal); opacity: 0.8; }
 body.has-mini { padding-bottom: 72px; }
 
+/* ---------- Sostieni: banner negli articoli e popup a fine puntata (js/main.js, js/podcast.js) ---------- */
+.support {
+  display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 18px; align-items: center;
+  max-width: 62ch; margin: 2em 0; padding: 20px 22px;
+  background: var(--charcoal); color: var(--on-charcoal);
+  border-bottom: 5px solid var(--teal);
+  font-size: 1rem; line-height: 1.55;
+}
+.support img { width: 76px; height: 76px; transform: rotate(-8deg); }
+.support-kicker { font: 500 0.72rem var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal); }
+.support-title { margin-top: 2px; font-weight: 900; font-stretch: 112%; font-size: 1.35rem; line-height: 1.15; color: var(--pink); }
+.support-text { margin-top: 6px; }
+.support-btn {
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; padding: 9px 14px;
+  background: var(--pink); color: var(--charcoal); text-decoration: none;
+  font: 700 0.8rem var(--mono); letter-spacing: 0.08em; text-transform: uppercase;
+}
+.support-btn:hover { background: var(--teal); color: var(--charcoal); }
+.support-btn svg { width: 18px; height: 18px; }
+.prose .support a { font-weight: 700; }
+
+.support-dialog {
+  width: min(440px, calc(100vw - 32px)); margin: auto; padding: 72px 24px 24px; overflow: visible;
+  background: var(--paper); color: var(--ink); border: 2px solid var(--line); border-bottom: 5px solid var(--teal);
+  text-align: center;
+}
+.support-dialog::backdrop { background: color-mix(in srgb, var(--charcoal) 75%, transparent); }
+.support-dialog .dialog-logo {
+  position: absolute; left: 50%; top: -56px; width: 112px; height: 112px;
+  transform: translateX(-50%) rotate(-8deg);
+}
+.support-dialog h2 { font-weight: 900; font-stretch: 112%; font-size: 1.7rem; line-height: 1.1; }
+.support-dialog h2 .hl { background: var(--pink); color: var(--charcoal); padding: 0 0.12em; }
+.support-dialog p { margin-top: 12px; color: var(--muted); }
+.dialog-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; }
+.dialog-actions .support-btn { margin-top: 0; }
+.dialog-close {
+  padding: 9px 14px; background: none; border: 2px solid var(--line); color: var(--ink); cursor: pointer;
+  font: 700 0.8rem var(--mono); letter-spacing: 0.08em; text-transform: uppercase;
+}
+.dialog-close:hover { background: var(--paper-2); }
+
 /* ---------- Mobile ---------- */
-@media (max-width: 960px) {
+@media (max-width: 1120px) {
   .menu-toggle { display: block; }
   .main-nav {
     display: none;
@@ -358,6 +468,9 @@ body.has-mini { padding-bottom: 72px; }
     border-bottom: 1px solid var(--charcoal-line);
   }
   body.menu-open { overflow: hidden; }
+  .main-nav .nav-cta { margin: 24px 0 0; }
+  .main-nav .nav-cta a { justify-content: center; gap: 10px; border-bottom: 0; }
+  .main-nav .nav-cta svg { width: 28px; height: 28px; }
 }
 
 @media (max-width: 600px) {
@@ -378,7 +491,7 @@ body.has-mini { padding-bottom: 72px; }
 
   .lv-player {
     grid-template-columns: 76px minmax(0, 1fr);
-    grid-template-areas: "cover head" "deck deck" "controls controls" "error error";
+    grid-template-areas: "cover head" "deck deck" "controls controls" "desc desc" "error error";
     gap: 0 14px; padding: 14px;
   }
   .lv-cover img { width: 76px; height: 76px; }
@@ -389,6 +502,9 @@ body.has-mini { padding-bottom: 72px; }
   .lv-ext { margin-left: auto; }
   .lv-mini-inner { gap: 10px; }
   .lv-mini-time { display: none; }
+
+  .support { grid-template-columns: 1fr; gap: 10px; padding: 18px; }
+  .support img { width: 56px; height: 56px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
