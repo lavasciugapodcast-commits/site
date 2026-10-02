@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ page.title | escape }} — Blog — Lavasciuga</title>
+  <title>{{ page.title | escape }} — Lavasciuga</title>
   <meta name="description" content="{{ page.lead | strip_newlines | escape }}">
   <meta property="og:type" content="article">
   <meta property="og:title" content="{{ page.title | escape }}">
@@ -26,17 +26,14 @@
     <div class="container header-inner">
       <a href="../index.html" class="brand" aria-label="Lavasciuga, torna alla home">
         <img class="brand-logo" src="../assets/logo-512.png" alt="Logo di Lavasciuga: un cervello mezzo immerso nell'acqua dentro l'oblò di una lavatrice" width="136" height="136">
-        <span>
-          <span class="brand-name">LAVASCIUGA</span>
-          <span class="brand-sub">Podcast · Blog · Sport</span>
-        </span>
       </a>
       <nav class="main-nav" id="menu" aria-label="Navigazione principale">
         <ul>
           <li><a href="../podcast.html">Podcast</a></li>
           <li><a href="../blog.html">Blog</a></li>
           <li><a href="../sport.html">Sport</a></li>
-          <li><a href="../news.html">News</a></li>
+          <li><a href="../spettacolo.html">Spettacolo</a></li>
+          <li><a href="../cucina.html">Cucina</a></li>
           <li><a href="../contatti.html">Contatti</a></li>
           <li><a href="../about.html">About</a></li>
           <li class="nav-cta"><a href="https://ko-fi.com/lavasciugapodcast" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 9h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8 3.5v2M12 3.5v2"/></svg>Sostieni</a></li>
@@ -56,9 +53,15 @@
         {%- assign mesi = "gennaio,febbraio,marzo,aprile,maggio,giugno,luglio,agosto,settembre,ottobre,novembre,dicembre" | split: "," -%}
         {%- assign mese = page.date | date: "%-m" | minus: 1 -%}
         {%- assign minuti = content | strip_html | number_of_words | plus: 100 | divided_by: 200 | at_least: 1 -%}
+        {%- assign sezione = page.categories | first | default: "blog" -%}
+        {%- case sezione -%}{%- when "sport" -%}{%- assign sezione_nome = "Sport" -%}{%- when "spettacolo" -%}{%- assign sezione_nome = "Spettacolo" -%}{%- when "cucina" -%}{%- assign sezione_nome = "Cucina" -%}{%- else -%}{%- assign sezione = "blog" -%}{%- assign sezione_nome = "Blog" -%}{%- endcase %}
+        {%- comment %} Autore: id di un file in _data/autori/ (gestiti dal pannello, collezione "Autori").
+             Se non c'è un profilo con quell'id, si mostra il testo così com'è e niente box. {% endcomment -%}
+        {%- assign autore = site.data.autori[page.autore] -%}
+        {%- if autore -%}{%- assign autore_nome = autore.nome -%}{%- else -%}{%- assign autore_nome = page.autore -%}{%- endif %}
         <article class="article">
           <header class="page-head article-head">
-            <p class="kicker"><a href="../blog.html">Blog</a>{% if page.categoria %} · {{ page.categoria | escape }}{% endif %}</p>
+            <p class="kicker"><a href="../{{ sezione }}.html">{{ sezione_nome }}</a>{% if page.categoria %} · {{ page.categoria | escape }}{% endif %}</p>
             {%- if page.evidenzia and page.evidenzia != "" %}
             {%- assign cerca = page.evidenzia | escape %}
             {%- capture parola %}<span class="hl">{{ cerca }}</span>{% endcapture %}
@@ -67,7 +70,7 @@
             <h1>{{ page.title | escape }}</h1>
             {%- endif %}
             {% if page.lead %}<p class="lead">{{ page.lead | escape }}</p>{% endif %}
-            <p class="article-meta"><time datetime="{{ page.date | date: '%Y-%m-%d' }}">{{ page.date | date: "%-d" }} {{ mesi[mese] }} {{ page.date | date: "%Y" }}</time>{% if page.autore %} · {{ page.autore | escape }}{% endif %} · {{ minuti }} min di lettura</p>
+            <p class="article-meta"><time datetime="{{ page.date | date: '%Y-%m-%d' }}">{{ page.date | date: "%-d" }} {{ mesi[mese] }} {{ page.date | date: "%Y" }}</time>{% if autore %} · <a href="#autore">{{ autore_nome | escape }}</a>{% elsif autore_nome %} · {{ autore_nome | escape }}{% endif %} · {{ minuti }} min di lettura</p>
           </header>
           {%- if page.nota %}
 
@@ -83,6 +86,30 @@
           <div class="prose">
 {{ content | replace: 'src="/assets/', 'src="../assets/' }}
           </div>
+          {%- if autore %}
+
+          <aside class="author-box" id="autore" aria-labelledby="autore-nome">
+            {%- if autore.foto and autore.foto != "" %}
+            <img class="author-photo" src="..{{ autore.foto }}" alt="Foto di {{ autore.nome | escape }}" width="112" height="112">
+            {%- else %}
+            <span class="author-photo author-initials" aria-hidden="true">{{ autore.nome | slice: 0 }}</span>
+            {%- endif %}
+            <div class="author-body">
+              <span class="kicker">Chi è l'autore</span>
+              <h2 class="author-name" id="autore-nome">{{ autore.nome | escape }}</h2>
+              {%- if autore.bio and autore.bio != "" %}
+              <p class="author-bio">{{ autore.bio | escape }}</p>
+              {%- endif %}
+              {%- if autore.social and autore.social.size > 0 %}
+              <ul class="author-links" aria-label="Canali di {{ autore.nome | escape }}">
+                {%- for link in autore.social %}
+                <li><a href="{{ link.url | escape }}" target="_blank" rel="noopener">{{ link.piattaforma | escape }} ↗</a></li>
+                {%- endfor %}
+              </ul>
+              {%- endif %}
+            </div>
+          </aside>
+          {%- endif %}
           {%- if page.episodio and page.episodio != "" %}
           {%- assign episodio_id = page.episodio | split: "--" | last | split: "/" | last | split: "?" | first %}
 
@@ -94,7 +121,7 @@
           </aside>
           {%- endif %}
 
-          <p class="back"><a href="../blog.html">← Tutti gli articoli</a></p>
+          <p class="back"><a href="../{{ sezione }}.html">← Tutti gli articoli di {{ sezione_nome }}</a></p>
         </article>
 
         <footer class="site-footer">

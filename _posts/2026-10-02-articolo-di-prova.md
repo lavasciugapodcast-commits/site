@@ -2,9 +2,10 @@
 title: Articolo di prova
 evidenzia: prova
 lead: Vediamo se funziona questo strumento
+categories: blog
 date: 2026-10-02
 categoria: Opinioni
-autore: Redazione Lavasciuga
+autore: redazione-lavasciuga
 copertina: /assets/blog/ASSET_MMS_84974603.webp
 copertina_alt: lavasciuga
 episodio: https://www.spreaker.com/episode/048-opinioni-sintetiche-l-industria-musicale-e-il-caso-chaotic-good--72084673

@@ -8,8 +8,10 @@ kramdown:
   input: GFM
   hard_wrap: false
 
-# Articoli: _posts/AAAA-MM-GG-slug.md  ->  /blog/slug.html (stesso indirizzo di prima)
-permalink: /blog/:title:output_ext
+# Articoli: _posts/AAAA-MM-GG-slug.md  ->  /<sezione>/slug.html
+# La sezione è il campo "categories" dell'articolo: blog, sport o spettacolo. Va sempre scritta nell'articolo
+# (il pannello /admin lo fa da solo): un valore predefinito qui verrebbe sommato a quello dell'articolo.
+permalink: /:categories/:title:output_ext
 defaults:
   - scope:
       path: ""

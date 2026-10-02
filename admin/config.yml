@@ -36,13 +36,13 @@ collections:
   - name: articoli
     label: Articoli
     label_singular: Articolo
-    description: Gli articoli del blog. Ogni articolo pubblicato va online in un paio di minuti.
+    description: Gli articoli di Blog, Sport, Spettacolo e Cucina. Ogni articolo pubblicato va online in un paio di minuti.
     folder: _posts
     create: true
     delete: true
-    # Jekyll vuole i nomi file AAAA-MM-GG-titolo.md; l'indirizzo sul sito sarà /blog/titolo.html
+    # Jekyll vuole i nomi file AAAA-MM-GG-titolo.md; l'indirizzo sul sito sarà /<sezione>/titolo.html
     slug: "{{date | date('YYYY-MM-DD')}}-{{slug}}"
-    summary: "{{title}} · {{date | date('D/M/YYYY')}} · {{autore}}"
+    summary: "{{title}} · {{categories}} · {{date | date('D/M/YYYY')}} · {{autore}}"
     sortable_fields: [date, title, autore]
     fields:
       - name: title
@@ -63,15 +63,49 @@ collections:
         type: date
         format: YYYY-MM-DD
         default: "{{now}}"
+      # Sezione del sito in cui compare l'articolo; decide anche l'indirizzo (/blog/..., /sport/..., /spettacolo/..., /cucina/...)
+      - name: categories
+        label: Sezione
+        widget: select
+        options:
+          - { label: Blog, value: blog }
+          - { label: Sport, value: sport }
+          - { label: Spettacolo (musica, cinema, teatro…), value: spettacolo }
+          - { label: Cucina, value: cucina }
+        default: blog
+        hint: "La pagina del sito in cui compare l'articolo."
       - name: categoria
         label: Categoria
         widget: select
-        options: [Opinioni, Approfondimenti, Sport, Dietro le quinte, Recensioni]
+        options:
+          - Opinioni
+          - Approfondimenti
+          - Interviste
+          - Recensioni
+          - Dietro le quinte
+          - Musica
+          - Cinema
+          - Serie TV
+          - Teatro
+          - Libri
+          - Calcio
+          - Basket
+          - Tennis
+          - Football americano
+          - Ricette
+          - Ristoranti
         default: Opinioni
+        hint: "Compare accanto alla sezione, sopra il titolo e nell'elenco degli articoli."
+      # Un profilo della collezione "Autori" (nel file resta il suo id, es. redazione-lavasciuga)
       - name: autore
         label: Autore
-        widget: string
-        default: Redazione Lavasciuga
+        widget: relation
+        collection: autori
+        display_fields: [nome]
+        search_fields: [nome]
+        default: redazione-lavasciuga
+        hint: "Scegli l'autore dall'elenco. Se non c'è, crealo con il pulsante qui sotto: nome, foto, due righe di presentazione e i link ai suoi profili compariranno nel box 'Chi è l'autore' in fondo all'articolo."
+
       - name: copertina
         label: Immagine di copertina
         widget: image
@@ -91,3 +125,50 @@ collections:
         label: Testo
         widget: markdown
         hint: "Usa i titoletti (H2) per dividere l'articolo in parti: i banner 'Sostieni' si posizionano da soli tra una parte e l'altra."
+
+  # Profili degli autori: uno per file in _data/autori/<id>.yml. Nel sito: box "Chi è l'autore" in fondo agli articoli.
+  - name: autori
+    label: Autori
+    label_singular: Autore
+    description: I profili di chi scrive. Il box "Chi è l'autore" in fondo agli articoli prende da qui nome, foto, presentazione e link.
+    folder: _data/autori
+    extension: yml
+    format: yml
+    create: true
+    delete: true
+    identifier_field: nome
+    slug: "{{nome}}"
+    summary: "{{nome}}"
+    media_folder: /assets/autori
+    public_folder: /assets/autori
+    fields:
+      - name: nome
+        label: Nome e cognome
+        widget: string
+      - name: foto
+        label: Foto
+        widget: image
+        required: false
+        hint: "Facoltativa. Quadrata, viso ben visibile: verrà ritagliata in un cerchio. Senza foto compare l'iniziale del nome."
+      - name: bio
+        label: Presentazione
+        widget: text
+        required: false
+        hint: "Due o tre frasi: chi è, di cosa scrive."
+      - name: social
+        label: Link ai profili
+        label_singular: Link
+        widget: list
+        required: false
+        summary: "{{piattaforma}}"
+        fields:
+          - name: piattaforma
+            label: Piattaforma
+            widget: select
+            options: [Instagram, TikTok, YouTube, Facebook, X, Threads, Bluesky, LinkedIn, Spotify, Twitch, Linktree, Sito web, Altro]
+          - name: url
+            label: Indirizzo completo
+            widget: string
+            hint: "Il link completo, es. https://www.instagram.com/nomeutente"
+            pattern: ['^https?://', "Deve iniziare con https://"]
+

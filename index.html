@@ -24,17 +24,14 @@
     <div class="container header-inner">
       <a href="index.html" class="brand" aria-label="Lavasciuga, torna alla home">
         <img class="brand-logo" src="assets/logo-512.png" alt="Logo di Lavasciuga: un cervello mezzo immerso nell'acqua dentro l'oblò di una lavatrice" width="136" height="136">
-        <span>
-          <span class="brand-name">LAVASCIUGA</span>
-          <span class="brand-sub">Podcast · Blog · Sport</span>
-        </span>
       </a>
       <nav class="main-nav" id="menu" aria-label="Navigazione principale">
         <ul>
           <li><a href="podcast.html">Podcast</a></li>
           <li><a href="blog.html">Blog</a></li>
           <li><a href="sport.html">Sport</a></li>
-          <li><a href="news.html">News</a></li>
+          <li><a href="spettacolo.html">Spettacolo</a></li>
+          <li><a href="cucina.html">Cucina</a></li>
           <li><a href="contatti.html">Contatti</a></li>
           <li><a href="about.html">About</a></li>
           <li class="nav-cta"><a href="https://ko-fi.com/lavasciugapodcast" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 9h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8 3.5v2M12 3.5v2"/></svg>Sostieni</a></li>
@@ -74,46 +71,70 @@
         <!-- Spazio pubblicitario: compare solo quando AdSense è attivo (js/main.js) -->
         <div data-annuncio="home"></div>
 
-        <!-- TODO: contenuto reale -->
         <section class="block">
           <div class="block-head"><h2>Dalle altre sezioni</h2></div>
+          <!-- Ultimo articolo di ogni sezione, generato da Jekyll -->
+          {%- assign mesi = "gen,feb,mar,apr,mag,giu,lug,ago,set,ott,nov,dic" | split: "," -%}
           <div class="columns">
             <div>
-              <span class="kicker">Blog</span>
-          <!-- Ultimo articolo, generato da Jekyll dai file in _posts/ -->
-          {%- assign mesi = "gen,feb,mar,apr,mag,giu,lug,ago,set,ott,nov,dic" | split: "," -%}
-          <ul class="entries">
-            {%- for post in site.posts limit: 1 %}
-            <li class="entry">
-              {%- assign m = post.date | date: "%-m" | minus: 1 %}
-              <span class="meta"><time datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%-d" }} {{ mesi[m] }} {{ post.date | date: "%Y" }}</time></span>
-              <h3><a href="{{ post.url | remove_first: '/' }}">{{ post.title | escape }}</a></h3>
-              <p>{{ post.lead | escape }}</p>
-            </li>
-            {%- else %}
-            <li class="entry"><span class="meta">Prossimamente</span><h3><a href="blog.html">Il primo articolo è in arrivo</a></h3></li>
-            {%- endfor %}
-          </ul>
+              <span class="kicker"><a href="blog.html">Blog</a></span>
+              <ul class="entries">
+                {%- for post in site.categories.blog limit: 1 %}
+                <li class="entry">
+                  {%- assign m = post.date | date: "%-m" | minus: 1 %}
+                  <span class="meta"><time datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%-d" }} {{ mesi[m] }} {{ post.date | date: "%Y" }}</time>{% if post.categoria %} · {{ post.categoria | escape }}{% endif %}</span>
+                  <h3><a href="{{ post.url | remove_first: '/' }}">{{ post.title | escape }}</a></h3>
+                  <p>{{ post.lead | escape }}</p>
+                </li>
+                {%- else %}
+                <li class="entry"><span class="meta">Prossimamente</span><h3><a href="blog.html">Il primo articolo è in arrivo</a></h3></li>
+                {%- endfor %}
+              </ul>
             </div>
             <div>
-              <span class="kicker">Sport</span>
-          <ul class="entries">
-            <li class="entry">
-              <span class="meta">Prossimamente</span>
-              <h3><a href="sport.html">Il weekend sportivo</a></h3>
-              <p>Commenti, pagelle e opinioni sul weekend di sport.</p>
-            </li>
-          </ul>
+              <span class="kicker"><a href="sport.html">Sport</a></span>
+              <ul class="entries">
+                {%- for post in site.categories.sport limit: 1 %}
+                <li class="entry">
+                  {%- assign m = post.date | date: "%-m" | minus: 1 %}
+                  <span class="meta"><time datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%-d" }} {{ mesi[m] }} {{ post.date | date: "%Y" }}</time>{% if post.categoria %} · {{ post.categoria | escape }}{% endif %}</span>
+                  <h3><a href="{{ post.url | remove_first: '/' }}">{{ post.title | escape }}</a></h3>
+                  <p>{{ post.lead | escape }}</p>
+                </li>
+                {%- else %}
+                <li class="entry"><span class="meta">Prossimamente</span><h3><a href="sport.html">Il primo articolo è in arrivo</a></h3></li>
+                {%- endfor %}
+              </ul>
             </div>
             <div>
-              <span class="kicker">News</span>
-          <ul class="entries">
-            <li class="entry">
-              <span class="meta">Prossimamente</span>
-              <h3><a href="news.html">Novità da Lavasciuga</a></h3>
-              <p>Uscite, ospiti e tutto quello che bolle in pentola.</p>
-            </li>
-          </ul>
+              <span class="kicker"><a href="spettacolo.html">Spettacolo</a></span>
+              <ul class="entries">
+                {%- for post in site.categories.spettacolo limit: 1 %}
+                <li class="entry">
+                  {%- assign m = post.date | date: "%-m" | minus: 1 %}
+                  <span class="meta"><time datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%-d" }} {{ mesi[m] }} {{ post.date | date: "%Y" }}</time>{% if post.categoria %} · {{ post.categoria | escape }}{% endif %}</span>
+                  <h3><a href="{{ post.url | remove_first: '/' }}">{{ post.title | escape }}</a></h3>
+                  <p>{{ post.lead | escape }}</p>
+                </li>
+                {%- else %}
+                <li class="entry"><span class="meta">Prossimamente</span><h3><a href="spettacolo.html">Il primo articolo è in arrivo</a></h3></li>
+                {%- endfor %}
+              </ul>
+            </div>
+            <div>
+              <span class="kicker"><a href="cucina.html">Cucina</a></span>
+              <ul class="entries">
+                {%- for post in site.categories.cucina limit: 1 %}
+                <li class="entry">
+                  {%- assign m = post.date | date: "%-m" | minus: 1 %}
+                  <span class="meta"><time datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%-d" }} {{ mesi[m] }} {{ post.date | date: "%Y" }}</time>{% if post.categoria %} · {{ post.categoria | escape }}{% endif %}</span>
+                  <h3><a href="{{ post.url | remove_first: '/' }}">{{ post.title | escape }}</a></h3>
+                  <p>{{ post.lead | escape }}</p>
+                </li>
+                {%- else %}
+                <li class="entry"><span class="meta">Prossimamente</span><h3><a href="cucina.html">Il primo articolo è in arrivo</a></h3></li>
+                {%- endfor %}
+              </ul>
             </div>
           </div>
         </section>

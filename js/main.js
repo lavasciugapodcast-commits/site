@@ -1,4 +1,4 @@
-// Menu mobile (sopra i 1120px il menu è sempre visibile in orizzontale)
+// Menu mobile (sopra i 1050px il menu è sempre visibile in orizzontale)
 const toggle = document.querySelector('.menu-toggle');
 const nav = document.querySelector('.main-nav');
 if (toggle && nav) {
@@ -12,7 +12,7 @@ if (toggle && nav) {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && nav.classList.contains('open')) { setOpen(false); toggle.focus(); }
   });
-  window.matchMedia('(min-width: 1121px)').addEventListener('change', (e) => { if (e.matches) setOpen(false); });
+  window.matchMedia('(min-width: 1051px)').addEventListener('change', (e) => { if (e.matches) setOpen(false); });
 }
 
 // Voce attiva nel menu (gli articoli in blog/ accendono "Blog")
@@ -22,6 +22,61 @@ document.querySelectorAll('.main-nav a').forEach((a) => {
   if (a.origin !== location.origin) return;   // es. "Sostieni" su Ko-fi
   if (a.pathname === here || here.startsWith(section)) a.setAttribute('aria-current', 'page');
 });
+
+// Logo come il cestello di una lavatrice: al passaggio del mouse (o col focus da tastiera) parte e gira di continuo;
+// quando si esce rallenta piano e si ferma dritto. Niente animazione se il sistema chiede di ridurre i movimenti.
+const brand = document.querySelector('.brand');
+const drum = document.querySelector('.brand-logo');
+if (brand && drum && drum.animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const TURN_MS = 1400;   // un giro a regime
+  let spin = null;
+
+  const currentAngle = () => {
+    const m = getComputedStyle(drum).transform;
+    if (!m || m === 'none') return 0;
+    const [a, b] = m.match(/matrix\(([^)]+)\)/)[1].split(',').map(Number);
+    return Math.round((Math.atan2(b, a) * 180) / Math.PI * 10) / 10;   // arrotondato: evita 0.0000001° = un giro in più
+  };
+  const stopAll = () => drum.getAnimations().forEach((an) => an.cancel());
+
+  const start = () => {
+    const from = currentAngle();
+    stopAll();
+    // mezzo giro per prendere velocità, poi giri costanti
+    spin = drum.animate(
+      [{ transform: `rotate(${from}deg)` }, { transform: `rotate(${from + 180}deg)` }],
+      { duration: TURN_MS * 0.75, easing: 'cubic-bezier(.5,0,1,1)', fill: 'forwards' },
+    );
+    spin.onfinish = () => {
+      if (!spin) return;
+      stopAll();
+      spin = drum.animate(
+        [{ transform: `rotate(${from + 180}deg)` }, { transform: `rotate(${from + 540}deg)` }],
+        { duration: TURN_MS, iterations: Infinity },
+      );
+    };
+  };
+
+  const stop = () => {
+    if (!spin) return;
+    spin = null;
+    const from = currentAngle();
+    stopAll();
+    // centrifuga che si spegne: almeno un giro, poi si ferma a 0° (logo dritto)
+    const toUpright = (360 - (((from % 360) + 360) % 360)) % 360;   // quanto manca per tornare dritto
+    const to = from + toUpright + 360;
+    const down = drum.animate(
+      [{ transform: `rotate(${from}deg)` }, { transform: `rotate(${to}deg)` }],
+      { duration: TURN_MS * 1.6, easing: 'cubic-bezier(.15,.6,.35,1)' },
+    );
+    down.onfinish = () => down.cancel();
+  };
+
+  brand.addEventListener('pointerenter', start);
+  brand.addEventListener('pointerleave', stop);
+  brand.addEventListener('focus', start);
+  brand.addEventListener('blur', stop);
+}
 
 // Anno nel footer
 const year = document.getElementById('year');
@@ -124,7 +179,7 @@ if (prose) {
     // "Ti sta piacendo?" a metà, solo se l'articolo è abbastanza lungo (~250 parole)
     const middle = proseLength >= 1500 ? textBreak(prose, 0.5) : null;
     if (middle) prose.insertBefore(supportBanner(), middle);
-    prose.after(supportBanner('Ti è piaciuto?'));
+    (document.querySelector('.article .author-box') || prose).after(supportBanner('Ti è piaciuto?'));
   }
 }
 
@@ -163,6 +218,7 @@ const LOCAL_HOST = /^(localhost|0\.0\.0\.0|127\.|10\.|192\.168\.|172\.(1[6-9]|2\
 const ADS_PREVIEW = !ADSENSE.client && (LOCAL_HOST || new URLSearchParams(location.search).has('annunci'));
 
 let adsScriptLoaded = false;
+let adsScriptBlocked = false;
 function adSlot(kind, tag = 'aside') {
   if (!ADSENSE.client && !ADS_PREVIEW) return null;
   const slot = document.createElement(tag);
@@ -179,6 +235,7 @@ function adSlot(kind, tag = 'aside') {
       sc.async = true;
       sc.crossOrigin = 'anonymous';
       sc.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE.client}`;
+      sc.onerror = () => { adsScriptBlocked = true; };   // segnale usato da checkAdblock()
       document.head.append(sc);
     }
     const ins = document.createElement('ins');
@@ -219,4 +276,73 @@ if (prose && proseLength >= 900) {
   const at = textBreak(prose, 0.25);
   const slot = at ? adSlot('articolo') : null;
   if (slot) prose.insertBefore(slot, at);
+}
+
+// Adblocker: un invito gentile a disattivarlo, mai un blocco. Solo con AdSense attivo (senza pubblicità non ha senso);
+// per vederlo prima: ?adblock nell'indirizzo. La verifica resta nel browser: il risultato non si salva né si invia.
+// Chiuso l'avviso, si salva solo la data (localStorage "adblock-avviso") e non ricompare per 7 giorni.
+const ADBLOCK_EVERY_MS = 7 * 24 * 60 * 60 * 1000;
+const ADBLOCK_PREVIEW = new URLSearchParams(location.search).has('adblock');
+
+// Esca: un elemento con i nomi che i filtri degli adblocker nascondono. Se sparisce, o se lo script di AdSense non
+// si carica, c'è un adblocker.
+function checkAdblock() {
+  return new Promise((resolve) => {
+    const bait = document.createElement('div');
+    bait.className = 'adsbox ad-banner textads banner-ads pub_300x250';
+    bait.setAttribute('aria-hidden', 'true');
+    bait.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;';
+    bait.innerHTML = '&nbsp;';
+    document.body.append(bait);
+    setTimeout(() => {
+      const hidden = !bait.offsetHeight || getComputedStyle(bait).display === 'none' || getComputedStyle(bait).visibility === 'hidden';
+      bait.remove();
+      resolve(hidden || adsScriptBlocked);
+    }, 1500);
+  });
+}
+
+function showAdblockNotice() {
+  const notice = document.createElement('aside');
+  notice.className = 'adblock-notice';
+  notice.setAttribute('role', 'region');
+  notice.setAttribute('aria-labelledby', 'adblock-titolo');
+  notice.innerHTML = `
+    <button type="button" class="adblock-close" aria-label="Chiudi">×</button>
+    <p class="adblock-kicker">Una richiesta</p>
+    <h2 class="adblock-title" id="adblock-titolo">Ci lasci a secco?</h2>
+    <p class="adblock-text">Sembra che tu abbia un blocco della pubblicità. Lo capiamo, ma qui gli annunci sono pochi e discreti
+      e ci aiutano a tenere in piedi il progetto: disattivarlo su questo sito è il modo più semplice per sostenerci.</p>
+    <div class="adblock-how" id="adblock-come" hidden>
+      <p>Clicca sull'icona del tuo blocco pubblicità, di solito in alto a destra nel browser, e scegli
+        «Disattiva su questo sito» o «Metti in pausa». Poi ricarica la pagina.</p>
+      <button type="button" class="adblock-reload">Ricarica la pagina</button>
+    </div>
+    <div class="adblock-actions">
+      <button type="button" class="adblock-toggle" aria-expanded="false" aria-controls="adblock-come">Come si fa</button>
+    </div>`;
+  notice.querySelector('.adblock-actions').append(kofiButton('Oppure offrici un caffè'));
+  document.body.append(notice);
+
+  const close = () => {
+    try { localStorage.setItem('adblock-avviso', String(Date.now())); } catch (e) { /* storage bloccato */ }
+    notice.remove();
+  };
+  notice.querySelector('.adblock-close').addEventListener('click', close);
+  notice.querySelector('.adblock-reload').addEventListener('click', () => location.reload());
+  const toggleBtn = notice.querySelector('.adblock-toggle');
+  toggleBtn.addEventListener('click', () => {
+    const how = notice.querySelector('.adblock-how');
+    how.hidden = !how.hidden;
+    toggleBtn.setAttribute('aria-expanded', String(!how.hidden));
+  });
+  requestAnimationFrame(() => notice.classList.add('show'));
+}
+
+if ((ADSENSE.client || ADBLOCK_PREVIEW) && !location.pathname.includes('/admin')) {
+  let last = 0;
+  try { last = Number(localStorage.getItem('adblock-avviso')) || 0; } catch (e) { /* storage bloccato */ }
+  if (ADBLOCK_PREVIEW || Date.now() - last > ADBLOCK_EVERY_MS) {
+    checkAdblock().then((blocked) => { if (blocked || ADBLOCK_PREVIEW) showAdblockNotice(); });
+  }
 }

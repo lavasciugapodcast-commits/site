@@ -6,8 +6,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blog — Lavasciuga</title>
-  <meta name="description" content="Il blog di Lavasciuga: articoli, riflessioni e approfondimenti.">
+  <title>Spettacolo — Lavasciuga</title>
+  <meta name="description" content="Musica, cinema, teatro e tutto quello che va in scena, raccontati da Lavasciuga.">
   <link rel="icon" href="assets/logo-64.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/logo-192.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,17 +49,17 @@
 
   <main id="contenuto" class="container">
         <section class="page-head">
-          <span class="kicker">02 — Blog</span>
-          <h1>Blog</h1>
-          <p class="lead">Articoli, riflessioni e approfondimenti, quando la puntata non basta.</p>
+          <span class="kicker">04 — Spettacolo</span>
+          <h1>Spettacolo</h1>
+          <p class="lead">Musica, cinema, teatro e tutto quello che va in scena.</p>
         </section>
 
         <section class="block">
           <div class="block-head"><h2>Articoli</h2></div>
-          <!-- Elenco generato da Jekyll dagli articoli con sezione "blog" (più recente in cima): non si scrive a mano -->
+          <!-- Elenco generato da Jekyll dagli articoli con sezione "spettacolo" (più recente in cima) -->
           {%- assign mesi = "gen,feb,mar,apr,mag,giu,lug,ago,set,ott,nov,dic" | split: "," -%}
           <ul class="entries" data-annunci-ogni="5">
-            {%- for post in site.categories.blog %}
+            {%- for post in site.categories.spettacolo %}
             <li class="entry">
               {%- assign m = post.date | date: "%-m" | minus: 1 %}
               <span class="meta"><time datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%-d" }} {{ mesi[m] }} {{ post.date | date: "%Y" }}</time>{% if post.categoria %} · {{ post.categoria | escape }}{% endif %}</span>

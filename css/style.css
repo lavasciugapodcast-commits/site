@@ -93,29 +93,16 @@ img { max-width: 100%; display: block; }
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
 }
 
+/* Solo il logo (il nome è già scritto nel logo): occupa la sua larghezza e sborda sotto l'header */
 .brand {
-  position: relative; align-self: stretch;
-  display: flex; align-items: center;
-  padding-left: calc(var(--logo) + 14px);
+  position: relative; align-self: stretch; flex-shrink: 0;
+  width: var(--logo);
   text-decoration: none; color: inherit;
 }
-.brand:hover { color: inherit; }
 .brand-logo {
   position: absolute; left: 0; top: 10px; z-index: 2;   /* resta sopra al pannello del menu mobile */
   width: var(--logo); height: var(--logo);
-  transition: transform 0.25s ease;
-}
-.brand:hover .brand-logo { transform: rotate(-8deg); }
-.brand-name {
-  display: block;
-  font-weight: 900; font-stretch: 125%;
-  font-size: 1.35rem; letter-spacing: 0.05em; line-height: 1;
-  color: var(--pink);
-}
-.brand-sub {
-  display: block; margin-top: 5px;
-  font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--teal);
+  will-change: transform;   /* gira come un cestello al passaggio del mouse: js/main.js */
 }
 
 .main-nav ul { list-style: none; display: flex; gap: 2px; }
@@ -467,6 +454,59 @@ li.ad-item { list-style: none; margin: 0; padding: 18px 0; border-top: 0; border
   font: 500 0.75rem var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
 }
 
+/* ---------- Box "Chi è l'autore" (fine articolo, _layouts/articolo.html) ---------- */
+.author-box {
+  display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 22px; align-items: start;
+  max-width: 62ch; margin-top: 40px; padding: 22px 0;
+  border-top: 2px solid var(--line); border-bottom: 1px solid var(--line-soft);
+}
+.author-photo {
+  width: 112px; height: 112px; border-radius: 50%; object-fit: cover;
+  border: 3px solid var(--charcoal); background: var(--charcoal);
+}
+.author-initials {
+  display: grid; place-items: center;
+  color: var(--pink); font-weight: 900; font-stretch: 125%; font-size: 2.6rem; line-height: 1;
+}
+.author-name { margin-top: 4px; font-weight: 900; font-stretch: 112%; font-size: 1.5rem; line-height: 1.15; }
+.author-bio { margin-top: 8px; color: var(--muted); line-height: 1.6; }
+.author-links { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.author-links a {
+  display: inline-block; padding: 6px 10px; border: 2px solid var(--line); color: var(--ink); text-decoration: none;
+  font: 700 0.75rem var(--mono); letter-spacing: 0.06em; text-transform: uppercase;
+}
+.author-links a:hover { background: var(--teal); border-color: var(--teal); color: var(--charcoal); }
+.article-meta a { color: inherit; text-decoration-thickness: 1px; }
+
+/* ---------- Avviso adblocker (js/main.js): riquadro in basso, non blocca nulla ---------- */
+.adblock-notice {
+  position: fixed; right: 16px; bottom: 16px; z-index: 19;
+  width: min(380px, calc(100vw - 32px)); padding: 20px 20px 18px;
+  background: var(--charcoal); color: var(--on-charcoal);
+  border-top: 5px solid var(--teal);
+  transform: translateY(calc(100% + 24px)); transition: transform 0.3s ease;
+}
+.adblock-notice.show { transform: none; }
+body.has-mini .adblock-notice { bottom: 88px; }   /* sopra la mini barra del player */
+.adblock-kicker { font: 500 0.72rem var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal); }
+.adblock-title { margin-top: 2px; padding-right: 28px; font-weight: 900; font-stretch: 112%; font-size: 1.45rem; line-height: 1.15; color: var(--pink); }
+.adblock-text, .adblock-how p { margin-top: 8px; font-size: 0.95rem; line-height: 1.55; }
+.adblock-how { margin-top: 10px; padding: 10px 12px; border-left: 4px solid var(--teal); background: color-mix(in srgb, var(--on-charcoal) 8%, transparent); }
+.adblock-how p { margin-top: 0; }
+.adblock-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.adblock-actions .support-btn { margin-top: 0; }
+.adblock-toggle, .adblock-reload {
+  padding: 9px 14px; background: none; border: 2px solid var(--on-charcoal); color: var(--on-charcoal); cursor: pointer;
+  font: 700 0.8rem var(--mono); letter-spacing: 0.08em; text-transform: uppercase;
+}
+.adblock-reload { margin-top: 10px; }
+.adblock-toggle:hover, .adblock-reload:hover { background: var(--teal); border-color: var(--teal); color: var(--charcoal); }
+.adblock-close {
+  position: absolute; top: 10px; right: 10px; width: 32px; height: 32px;
+  background: none; border: 0; color: var(--on-charcoal); font-size: 1.6rem; line-height: 1; cursor: pointer;
+}
+.adblock-close:hover { color: var(--pink); }
+
 /* ---------- Copertina articolo e tabelle (pagine privacy/cookie) ---------- */
 .article-cover { max-width: 62ch; margin-top: 28px; }
 .article-cover img { width: 100%; height: auto; border: 2px solid var(--line); }
@@ -479,7 +519,7 @@ li.ad-item { list-style: none; margin: 0; padding: 18px 0; border-top: 0; border
 .legal-updated { margin-top: 18px; font: 500 0.8rem var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
 
 /* ---------- Mobile ---------- */
-@media (max-width: 1120px) {
+@media (max-width: 1050px) {
   .menu-toggle { display: block; }
   .main-nav {
     display: none;
@@ -502,10 +542,7 @@ li.ad-item { list-style: none; margin: 0; padding: 18px 0; border-top: 0; border
 @media (max-width: 600px) {
   :root { --header-h: 68px; --logo: 96px; --head-top: 64px; --gutter: 16px; }
   .header-inner { gap: 10px; }
-  .brand { padding-left: calc(var(--logo) + 10px); min-width: 0; }
   .brand-logo { top: 8px; }
-  .brand-name { font-size: 1rem; letter-spacing: 0.03em; }
-  .brand-sub { font-size: 0.6rem; letter-spacing: 0.02em; white-space: nowrap; }
 
   .entry { grid-template-columns: 1fr; }
   .entry p { grid-column: 1; }
@@ -530,10 +567,13 @@ li.ad-item { list-style: none; margin: 0; padding: 18px 0; border-top: 0; border
   .lv-mini-time { display: none; }
 
   .support { grid-template-columns: 1fr; gap: 10px; padding: 18px; }
+  .author-box { grid-template-columns: 72px minmax(0, 1fr); gap: 14px; }
+  .author-photo { width: 72px; height: 72px; border-width: 2px; }
+  .author-initials { font-size: 1.8rem; }
   .support img { width: 56px; height: 56px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .lv-mini { transition: none; }
+  .lv-mini, .adblock-notice { transition: none; }
 }
