@@ -1,13 +1,14 @@
+<!-- Modello degli articoli del blog: i testi arrivano dai file in _posts/ (scritti a mano o dal pannello /admin) -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Notizie a ciclo delicato — Blog — Lavasciuga</title>
-  <meta name="description" content="Scrolliamo, leggiamo un titolo, ci indigniamo, passiamo oltre. E se il problema non fossero le notizie, ma la centrifuga in cui le infiliamo?">
+  <title>{{ page.title | escape }} — Blog — Lavasciuga</title>
+  <meta name="description" content="{{ page.lead | strip_newlines | escape }}">
   <meta property="og:type" content="article">
-  <meta property="og:title" content="Notizie a ciclo delicato">
-  <meta property="og:description" content="Scrolliamo, leggiamo un titolo, ci indigniamo, passiamo oltre. E se il problema non fossero le notizie, ma la centrifuga in cui le infiliamo?">
+  <meta property="og:title" content="{{ page.title | escape }}">
+  <meta property="og:description" content="{{ page.lead | strip_newlines | escape }}">
   <meta property="og:site_name" content="Lavasciuga">
   <link rel="icon" href="../assets/logo-64.png" type="image/png">
   <link rel="apple-touch-icon" href="../assets/logo-192.png">
@@ -52,46 +53,46 @@
   </header>
 
   <main id="contenuto" class="container">
+        {%- assign mesi = "gennaio,febbraio,marzo,aprile,maggio,giugno,luglio,agosto,settembre,ottobre,novembre,dicembre" | split: "," -%}
+        {%- assign mese = page.date | date: "%-m" | minus: 1 -%}
+        {%- assign minuti = content | strip_html | number_of_words | plus: 100 | divided_by: 200 | at_least: 1 -%}
         <article class="article">
           <header class="page-head article-head">
-            <p class="kicker"><a href="../blog.html">Blog</a> · Opinioni</p>
-            <h1>Notizie a <span class="hl">ciclo delicato</span></h1>
-            <p class="lead">Scrolliamo, leggiamo un titolo, ci indigniamo, passiamo oltre. E se il problema non fossero le notizie, ma la centrifuga in cui le infiliamo?</p>
-            <p class="article-meta"><time datetime="2026-10-01">1 ottobre 2026</time> · Redazione Lavasciuga · 4 min di lettura</p>
+            <p class="kicker"><a href="../blog.html">Blog</a>{% if page.categoria %} · {{ page.categoria | escape }}{% endif %}</p>
+            {%- if page.evidenzia and page.evidenzia != "" %}
+            {%- assign cerca = page.evidenzia | escape %}
+            {%- capture parola %}<span class="hl">{{ cerca }}</span>{% endcapture %}
+            <h1>{{ page.title | escape | replace: cerca, parola }}</h1>
+            {%- else %}
+            <h1>{{ page.title | escape }}</h1>
+            {%- endif %}
+            {% if page.lead %}<p class="lead">{{ page.lead | escape }}</p>{% endif %}
+            <p class="article-meta"><time datetime="{{ page.date | date: '%Y-%m-%d' }}">{{ page.date | date: "%-d" }} {{ mesi[mese] }} {{ page.date | date: "%Y" }}</time>{% if page.autore %} · {{ page.autore | escape }}{% endif %} · {{ minuti }} min di lettura</p>
           </header>
+          {%- if page.nota %}
 
-          <!-- TODO: contenuto reale. Articolo di esempio per provare l'impaginazione: sostituire o cancellare -->
-          <p class="note">Articolo di esempio, scritto per provare l'impaginazione del blog.</p>
+          <p class="note">{{ page.nota | escape }}</p>
+          {%- endif %}
+          {%- if page.copertina %}
+
+          <figure class="article-cover">
+            <img src="..{{ page.copertina }}" alt="{{ page.copertina_alt | escape }}">
+          </figure>
+          {%- endif %}
 
           <div class="prose">
-            <p>Ogni mattina apriamo il telefono e ci finisce addosso un carico misto: politica, calcio, un litigio tra due persone che non conosciamo, una notizia vera, due mezze vere e una inventata. Tutto alla stessa temperatura, tutto alla stessa velocità. Il risultato, come succede con i panni, è che i colori si mescolano: alla fine non distinguiamo più cosa era bianco e cosa no.</p>
-
-            <h2>Il programma rapido non lava</h2>
-            <p>Il feed è pensato per il programma rapido. Trenta secondi per notizia, poi la successiva. Funziona benissimo per tenerci dentro l'app, molto meno per capire qualcosa. Una notizia ha bisogno di tempo: per essere verificata da chi la scrive e per essere digerita da chi la legge. Quando saltiamo entrambi i passaggi resta una sensazione, che sia rabbia, paura o euforia. Raramente un'informazione.</p>
-
-            <blockquote>
-              <p>Non è che leggiamo troppo. È che leggiamo tutto allo stesso modo.</p>
-            </blockquote>
-
-            <h2>Separare i capi</h2>
-            <p>Il primo consiglio è quello della nonna: separare i capi. Non tutte le notizie meritano la stessa attenzione, e non tutte vanno lette subito. Qualche abitudine che proviamo a seguire anche noi:</p>
-            <ul>
-              <li>aspettare un giorno prima di farsi un'opinione su un fatto appena successo, perché le prime versioni sono spesso sbagliate;</li>
-              <li>risalire alla fonte originale, non allo screenshot dello screenshot;</li>
-              <li>chiedersi chi ci guadagna se condividiamo quella cosa proprio adesso;</li>
-              <li>scegliere poche fonti di cui fidarsi, invece di inseguirle tutte.</li>
-            </ul>
-
-            <h2>E poi asciugare</h2>
-            <p>Dopo il lavaggio viene l'asciugatura, la parte che di solito saltiamo: lasciar sedimentare. Parlarne con qualcuno, leggere un parere diverso dal nostro, cambiare idea se serve. È quello che proviamo a fare nelle puntate: prendere un tema che gira in centrifuga sui social e rallentarlo, finché non si capisce di cosa stiamo parlando davvero.</p>
-            <p>Non è una ricetta perfetta e non ci rende immuni dalle bufale. Ma un ciclo delicato, ogni tanto, non ha mai rovinato niente.</p>
+{{ content | replace: 'src="/assets/', 'src="../assets/' }}
           </div>
+          {%- if page.episodio and page.episodio != "" %}
+          {%- assign episodio_id = page.episodio | split: "--" | last | split: "/" | last | split: "?" | first %}
 
-          <aside class="related" aria-label="Episodio collegato">
+          <!-- Titolo e numero dell'episodio li completa js/main.js dall'API di Spreaker -->
+          <aside class="related" aria-label="Episodio collegato" data-episode-id="{{ episodio_id }}">
             <span class="kicker">Ne abbiamo parlato in puntata</span>
-            <p class="related-title"><span class="related-num">050</span> Speciale estate 2026: il caso Baresi e la qualità dell'informazione al tempo dei social media</p>
-            <a class="related-link" href="../podcast.html#ep-73897509">Ascolta l'episodio</a>
+            <p class="related-title">Ascolta l'episodio collegato</p>
+            <a class="related-link" href="../podcast.html#ep-{{ episodio_id }}">Ascolta l'episodio</a>
           </aside>
+          {%- endif %}
 
           <p class="back"><a href="../blog.html">← Tutti gli articoli</a></p>
         </article>
@@ -105,6 +106,8 @@
             <li><a href="#">Instagram</a></li>
             <li><a href="#">YouTube</a></li>
             <li><a href="#">Spotify</a></li>
+            <li><a href="../privacy.html">Privacy</a></li>
+            <li><a href="../cookie.html">Cookie</a></li>
           </ul>
         </footer>
     </main>

@@ -1,0 +1,93 @@
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms/schema/sveltia-cms.json
+# Pannello /admin (Sveltia CMS). Salva gli articoli come file Markdown in _posts/ con un commit su GitHub;
+# GitHub Pages poi ricostruisce il sito con Jekyll. Istruzioni complete in CLAUDE.md, sezione "Area admin".
+
+backend:
+  name: github
+  repo: lavasciugapodcast-commits/site
+  branch: main
+  # Per ora si entra solo con un token di accesso GitHub (il pannello spiega come crearlo).
+  # Pulsante "Accedi con GitHub": quando l'autenticatore (Sveltia CMS Authenticator su Cloudflare Workers,
+  # vedi CLAUDE.md) è pronto, togliere il # da base_url e mettere auth_methods: [oauth, token].
+  auth_methods: [token]
+  # base_url: https://sveltia-cms-auth.NOME.workers.dev
+  commit_messages:
+    create: "Nuovo articolo: {{slug}}"
+    update: "Modifica articolo: {{slug}}"
+    delete: "Articolo eliminato: {{slug}}"
+    uploadMedia: "Immagine caricata: {{path}}"
+    deleteMedia: "Immagine eliminata: {{path}}"
+
+site_url: https://lavasciugapodcast-commits.github.io/site/
+display_url: https://lavasciugapodcast-commits.github.io/site/
+logo_url: ../assets/logo-192.png
+
+# Immagini caricate dal pannello: nel repository in assets/blog/, nel testo come /assets/blog/... (il modello
+# degli articoli corregge il percorso da solo)
+media_folder: assets/blog
+public_folder: /assets/blog
+
+# Indirizzi senza accenti né caratteri strani (es. "Perché sì" -> perche-si)
+slug:
+  encoding: ascii
+  clean_accents: true
+
+collections:
+  - name: articoli
+    label: Articoli
+    label_singular: Articolo
+    description: Gli articoli del blog. Ogni articolo pubblicato va online in un paio di minuti.
+    folder: _posts
+    create: true
+    delete: true
+    # Jekyll vuole i nomi file AAAA-MM-GG-titolo.md; l'indirizzo sul sito sarà /blog/titolo.html
+    slug: "{{date | date('YYYY-MM-DD')}}-{{slug}}"
+    summary: "{{title}} · {{date | date('D/M/YYYY')}} · {{autore}}"
+    sortable_fields: [date, title, autore]
+    fields:
+      - name: title
+        label: Titolo
+        widget: string
+      - name: evidenzia
+        label: Parole da evidenziare nel titolo
+        widget: string
+        required: false
+        hint: "Facoltativo. Una o due parole del titolo, scritte identiche, da mettere in rosa (es. ciclo delicato)."
+      - name: lead
+        label: Sottotitolo
+        widget: text
+        hint: "Una o due frasi che riassumono l'articolo. Compare sotto il titolo, nell'elenco del blog e nelle anteprime sui social."
+      - name: date
+        label: Data
+        widget: datetime
+        type: date
+        format: YYYY-MM-DD
+        default: "{{now}}"
+      - name: categoria
+        label: Categoria
+        widget: select
+        options: [Opinioni, Approfondimenti, Sport, Dietro le quinte, Recensioni]
+        default: Opinioni
+      - name: autore
+        label: Autore
+        widget: string
+        default: Redazione Lavasciuga
+      - name: copertina
+        label: Immagine di copertina
+        widget: image
+        required: false
+        hint: "Facoltativa. Meglio orizzontale, almeno 1200 px di larghezza."
+      - name: copertina_alt
+        label: Descrizione dell'immagine
+        widget: string
+        required: false
+        hint: "Cosa si vede nell'immagine, per chi non può vederla (accessibilità)."
+      - name: episodio
+        label: Episodio collegato
+        widget: string
+        required: false
+        hint: "Facoltativo. Incolla il link dell'episodio su Spreaker: in fondo all'articolo comparirà il box 'Ne abbiamo parlato in puntata'."
+      - name: body
+        label: Testo
+        widget: markdown
+        hint: "Usa i titoletti (H2) per dividere l'articolo in parti: i banner 'Sostieni' si posizionano da soli tra una parte e l'altra."

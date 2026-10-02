@@ -4,18 +4,29 @@ Sito ufficiale di **Lavasciuga**: podcast, blog e sport. Per ora le sezioni sono
 
 ## Stack
 
-- HTML, CSS e JavaScript "vanilla". **Nessun framework, nessun build step, nessuna dipendenza npm.**
-- Si apre direttamente `index.html` nel browser, oppure si serve la cartella con un server statico
-  (es. `npx serve .`, `python -m http.server 8080` oppure l'estensione Live Server di VS Code).
-  Per vederlo dal telefono (stessa Wi-Fi): `http://<IP-del-PC>:8080`.
+- HTML, CSS e JavaScript "vanilla". **Nessun framework, nessuna dipendenza npm.**
+- **Jekyll solo per il blog**: GitHub Pages costruisce il sito con Jekyll a ogni push (nessuna installazione lato GitHub).
+  Passano dal modello solo i file con front matter (`---` in cima): gli articoli in `_posts/`, `blog.html` e `index.html`.
+  Tutte le altre pagine non hanno front matter e vengono copiate così come sono.
+- Anteprima in locale (Ruby 3.3 in `C:\Ruby33-x64`, gemme in `vendor/` con Bundler, vedi `Gemfile`):
+  `bundle exec jekyll serve --host 0.0.0.0 --port 8080 --baseurl ""` (prima volta: `bundle install`).
+  Si aggiorna da solo quando cambi un file. Da telefono (stessa Wi-Fi): `http://<IP-del-PC>:8080`.
+  Con `python -m http.server 8080` si vedono tutte le pagine tranne articoli, elenco blog e colonna Blog della home.
+- `Gemfile` usa `github-pages`: stesse versioni di Jekyll e plugin di GitHub Pages (Jekyll 3.10). `_site/`, `vendor/`,
+  `Gemfile.lock` non vanno nel repository (`.gitignore`).
 
 ## Struttura
 
 ```
 index.html        Home: claim, player con l'ultimo episodio + 3 precedenti, ultimi contenuti delle sezioni
 podcast.html      Player, link alle piattaforme, elenco di tutti gli episodi con ricerca
-blog.html         Elenco articoli del blog (a mano, più recente in cima)
-blog/             Un file .html per articolo (es. blog/ciclo-delicato.html)
+blog.html         Elenco articoli, generato da Jekyll (più recente in cima)
+_posts/           Articoli in Markdown: AAAA-MM-GG-slug.md  ->  /blog/slug.html
+_layouts/         articolo.html: modello della pagina articolo
+_config.yml       Configurazione Jekyll (indirizzi degli articoli, file esclusi)
+admin/            Pannello per i collaboratori (Sveltia CMS): index.html + config.yml
+privacy.html      Privacy policy
+cookie.html       Cookie policy
 sport.html        Rubriche sport
 news.html         Notizie e annunci
 contatti.html     Email e social
@@ -23,7 +34,7 @@ about.html        Chi siamo
 css/style.css     Unico foglio di stile (palette del logo in :root, dark mode inclusa)
 js/main.js        Menu mobile, voce attiva, anno nel footer, tema chiaro/scuro
 js/podcast.js     Player audio del podcast + elenco episodi (solo index e podcast)
-assets/           Logo ridimensionato (logo-64/192/512.png), immagini, copertine
+assets/           Logo ridimensionato (logo-64/192/512.png); assets/blog/ immagini caricate dal pannello
 media/            Originali ad alta risoluzione (logo 2048px): non linkarli dalle pagine
 ```
 
@@ -63,38 +74,89 @@ media/            Originali ad alta risoluzione (logo 2048px): non linkarli dall
 - Mobile-first: verifica sempre il layout a 375px di larghezza.
 - Accessibilità: HTML semantico (`header`, `nav`, `main`, `article`, `footer`), contrasto sufficiente, ogni immagine con `alt`.
 - I contenuti segnaposto sono marcati con il commento `<!-- TODO: contenuto reale -->`.
-- Nuova pagina: copia `blog.html` come base, aggiorna `<title>`, meta description e aggiungi il link nel menu (`.main-nav`) di tutte le pagine.
+- Nuova pagina: copia `about.html` come base, aggiorna `<title>`, meta description e aggiungi il link nel menu (`.main-nav`) di tutte le pagine.
 
 ## Sostieni (Ko-fi)
 
 - Link: `https://ko-fi.com/lavasciugapodcast` (costante `KOFI_URL` in `js/main.js`).
 - Pulsante "Sostieni" turchese come ultima voce del menu (`<li class="nav-cta">`) in **tutte** le pagine, più "Ko-fi" nel footer.
   Se il menu cresce ancora, ricontrolla che stia su una riga a 1121px (sotto passa al menu mobile).
-- Banner negli articoli: li aggiunge `js/main.js` da solo, uno a metà (prima del `<h2>` più vicino al centro, solo se
-  l'articolo ha almeno 8 blocchi) e uno in fondo. Per sceglierne la posizione a mano: `<div data-sostieni></div>` nel testo
+- Banner negli articoli: li aggiunge `js/main.js` da solo, uno a metà del testo (articoli di almeno ~250 parole) e uno
+  in fondo. La posizione si misura sulla lunghezza del testo (`textBreak`), quindi funziona anche senza titoletti: se c'è
+  un `<h2>` vicino al punto giusto cade prima di quello, altrimenti tra due paragrafi. Per sceglierne la posizione a mano: `<div data-sostieni></div>` nel testo
   (in quel caso quelli automatici non vengono aggiunti).
 - Banner: quello a metà dice "Ti sta piacendo?", quello in fondo "Ti è piaciuto?" (`supportBanner(titolo)`).
 - Popup "Ciclo completo!" a fine puntata (`js/podcast.js`): negli ultimi 20 secondi o alla fine dell'episodio, una volta
   per episodio (`localStorage` "sostieni-<id>"). È un `<dialog>` modale: Esc, clic fuori o "Non ora" lo chiudono.
 
-## Blog: aggiungere un articolo
+## Blog
 
-1. Copia `blog/ciclo-delicato.html` in `blog/<slug>.html` (slug: minuscolo, parole separate da trattini, senza accenti).
-2. Aggiorna `<title>` ("Titolo — Blog — Lavasciuga"), meta description e i tag `og:` (titolo e descrizione).
-3. Nel `<header class="article-head">`: categoria nel kicker, `<h1>` (una parola chiave può andare in `<span class="hl">`),
-   `lead` di una-due frasi, data in `<time datetime="AAAA-MM-GG">`, autore e minuti di lettura (~200 parole al minuto).
-4. Testo dentro `<div class="prose">`: `<p>`, `<h2>`, `<ul>`, `<blockquote>`. Togli il `<p class="note">` dell'esempio.
-5. Box `related` facoltativo: episodio collegato, link `../podcast.html#ep-<episode_id>` (l'id è nell'URL Spreaker dell'episodio).
-6. Aggiungi l'articolo in cima alla lista di `blog.html` e sostituisci quello nella colonna Blog di `index.html`.
-- Gli articoli stanno in `blog/`, quindi tutti i percorsi locali iniziano con `../` (css, js, assets, link alle pagine).
-- La voce "Blog" del menu si accende da sola sulle pagine dentro `blog/` (`js/main.js`).
-- L'articolo `ciclo-delicato` è un esempio fittizio (marcato TODO): va sostituito o cancellato prima di andare davvero online.
+- Ogni articolo è un file Markdown in `_posts/AAAA-MM-GG-slug.md`; l'indirizzo è `/blog/slug.html`. La pagina la genera
+  `_layouts/articolo.html`; elenco in `blog.html` e articolo in home li genera Jekyll: **non si scrivono a mano**.
+- Campi in testa al file (front matter): `title`, `evidenzia` (parole del titolo da mettere in rosa, facoltativo), `lead`
+  (sottotitolo), `date`, `categoria`, `autore`, `copertina` + `copertina_alt` (facoltativi), `episodio` (link Spreaker
+  dell'episodio collegato: il box "Ne abbiamo parlato in puntata" si completa da solo con l'API), `nota` (avviso in cima).
+- Il modo normale di scrivere è il pannello `/admin`; a mano basta creare il file con gli stessi campi.
+- Tempo di lettura e data in italiano li calcola il modello (~200 parole al minuto).
+- Le immagini caricate dal pannello vanno in `assets/blog/` e nel testo hanno percorso `/assets/blog/...`: il modello
+  lo corregge in `../assets/blog/...` (il sito sta in una sottocartella finché non c'è il dominio).
+- L'articolo `2026-10-01-ciclo-delicato.md` è un esempio fittizio (marcato TODO, campo `nota`): va sostituito o cancellato.
+
+## Area admin (Sveltia CMS)
+
+- `admin/index.html` carica Sveltia CMS da unpkg; `admin/config.yml` definisce il modulo "Articoli" (campi in italiano).
+  Il pannello salva con un commit su `main` del repository `lavasciugapodcast-commits/site`; GitHub Pages ricostruisce.
+- **Accesso**: nessuna password nel sito. Si entra con GitHub; serve essere collaboratori del repository con permesso di
+  scrittura (GitHub → Settings → Collaborators). Togliere qualcuno da lì = non può più pubblicare.
+  - Oggi: "Accedi con Token di Accesso" (`auth_methods: [token]`): il pannello porta alla pagina GitHub per creare il token.
+  - Pulsante "Accedi con GitHub": serve un'OAuth App su GitHub + Sveltia CMS Authenticator su Cloudflare Workers
+    (gratuito, https://github.com/sveltia/sveltia-cms-auth); poi `base_url` e `auth_methods: [oauth, token]` in config.yml.
+  - In locale (Chrome/Edge su `localhost`): "Lavora con Repository Locale" modifica direttamente i file su disco, senza login.
+- **Se cambiamo hosting**: il pannello è fatto di file statici e parla direttamente con GitHub, quindi funziona ovunque
+  il sito sia pubblicato (Netlify, Cloudflare Pages, server proprio) finché il codice resta su GitHub. Cose da aggiornare:
+  `site_url`/`display_url` in config.yml, l'indirizzo del sito nell'OAuth App e nell'autenticatore (se usati).
+  Se il codice lasciasse GitHub (es. GitLab), Sveltia ha il backend `gitlab`: si cambia la sezione `backend`.
+  Jekyll si costruisce anche su Netlify/Cloudflare Pages (comando `jekyll build`, cartella `_site`).
+- Dominio nostro: cambiano solo `site_url`/`display_url` qui; i percorsi del sito sono già tutti relativi.
+
+## Pubblicità (Google AdSense)
+
+- Spazi gestiti da `js/main.js` (`ADSENSE`, `adSlot`): home tra "Ultimo episodio" e "Dalle altre sezioni"
+  (`<div data-annuncio="home">`), negli articoli a circa un quarto del testo (almeno ~150 parole, mai attaccato al banner
+  Sostieni, stessa funzione `textBreak`), negli elenchi con
+  `data-annunci-ogni="N"` (blog ogni 5 articoli, episodi ogni 12; nascosti durante la ricerca).
+- Finché `ADSENSE.client` è vuoto online non compare nulla; in locale (localhost, 0.0.0.0, 192.168.x.x) o con `?annunci`
+  nell'URL si vedono segnaposto.
+- Per attivarli serve il dominio nostro e l'approvazione AdSense, poi: `ADSENSE.client` ("ca-pub-..."), gli ID delle unità
+  in `ADSENSE.slots`, il file `ads.txt` nella radice, il banner del consenso di AdSense ("Privacy e messaggi") e
+  l'aggiornamento di privacy e cookie policy (sezioni "Pubblicità", marcate TODO).
+
+## Privacy e cookie
+
+- `privacy.html` e `cookie.html` descrivono il sito com'è oggi: GitHub Pages, Google Fonts, Spreaker, link a Ko-fi,
+  preferenze in `localStorage` (`tema`, `pos-<id>`, `velocita`, `sostieni-<id>`). Link nel footer di tutte le pagine.
+- Mancano i dati del titolare (TODO tra parentesi quadre). Se si aggiunge un servizio esterno o una chiave in
+  `localStorage`, aggiornare entrambe le pagine.
 
 ## Da fare
 
 - [x] Logo in `assets/`
 - [ ] Immagini reali (foto, copertine)
 - [ ] Link alle piattaforme del podcast (Spotify, Apple Podcasts, YouTube)
-- [ ] Primi articoli del blog (per ora c'è solo l'esempio `blog/ciclo-delicato.html`)
+- [ ] Primi articoli del blog (per ora c'è solo l'esempio `_posts/2026-10-01-ciclo-delicato.md`)
 - [ ] Contenuti sport (rubriche, risultati, commenti)
-- [ ] Scegliere hosting (es. GitHub Pages, Netlify) e dominio
+- [x] Hosting: GitHub Pages
+- [ ] Dominio nostro, poi AdSense
+- [ ] Dati del titolare in privacy/cookie policy
+- [ ] Pulsante "Accedi con GitHub" nel pannello admin (OAuth App + autenticatore)
+- [ ] (In pausa, per costi) Risultati sportivi nella pagina Sport: calcio (maggiori campionati), NBA, NFL, ATP/WTA, senza
+      diretta. Scelta verificata a ottobre 2026: TheSportsDB piano "Single Developer" 9 $/mese (copre tutto, tennis con
+      punteggio set per set in `strResult`; da verificare completezza dei turni tennis e classifiche NBA/NFL), dietro un
+      Cloudflare Worker che fa da cache ogni 15–30 min e tiene la chiave fuori dal sito. Scartati: BALLDONTLIE (si paga
+      per sport, ~50–80 $/mese; classifiche ATP/WTA però gratis), endpoint non ufficiali ESPN.
+- [ ] (Idea per il futuro) Aggregatore di notizie sportive nella pagina Sport: feed RSS delle testate, solo titolo +
+      estratto brevissimo + link al sito d'origine, nome della testata visibile, niente immagini (diritti delle foto).
+      Lecito (link: CGUE Svensson 2014; estratti molto brevi esclusi dal diritto degli editori, direttiva UE 2019/790,
+      recepita nel 2021), ma vanno controllate le condizioni d'uso dei feed di ogni testata (alcune vietano l'uso
+      commerciale). Aggiornamento gratuito con GitHub Actions (o Cloudflare Worker). Tenerlo come complemento ai
+      contenuti originali: un sito fatto di titoli altrui può pesare contro l'approvazione AdSense.

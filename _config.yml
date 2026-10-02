@@ -1,0 +1,30 @@
+# Jekyll (GitHub Pages lo usa da solo a ogni push). Solo gli articoli del blog, blog.html e index.html
+# passano dal modello; le altre pagine non hanno front matter e vengono copiate così come sono.
+title: Lavasciuga
+lang: it
+timezone: Europe/Rome
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+
+# Articoli: _posts/AAAA-MM-GG-slug.md  ->  /blog/slug.html (stesso indirizzo di prima)
+permalink: /blog/:title:output_ext
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: articolo
+
+# Attenzione: questa lista sostituisce quella predefinita di Jekyll, quindi include anche vendor/ e Gemfile
+exclude:
+  - vendor/
+  - .bundle/
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - README.md
+  - CLAUDE.md
+  - media/
+  - .claude/

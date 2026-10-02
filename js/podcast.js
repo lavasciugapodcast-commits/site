@@ -15,7 +15,7 @@ const API = 'https://api.spreaker.com/v2';
 
 // Sugli indirizzi locali (es. http://192.168.1.52:8080 per provare dal telefono) Spreaker non fa
 // partire l'audio se riceve l'indirizzo della pagina: lì non lo mandiamo. Online sì.
-if (/^(localhost|127\.|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|\[::1\])/.test(location.hostname)) {
+if (LOCAL_HOST) {   // definita in js/main.js
   const meta = document.createElement('meta');
   meta.name = 'referrer';
   meta.content = 'no-referrer';
@@ -488,6 +488,7 @@ async function setupList(list) {
   const limit = list.dataset.limit ? Number(list.dataset.limit) : Infinity;
   const episodes = (await getEpisodes(list.dataset.showId)).slice(offset, offset + limit);
   list.replaceChildren(...episodes.map(renderEpisode));
+  placeListAds(list);   // spazi pubblicitari ogni data-annunci-ogni episodi (js/main.js)
 
   const count = document.querySelector(`[data-episode-count="${list.id}"]`);
   const showCount = (shown) => {
@@ -506,6 +507,7 @@ async function setupList(list) {
         li.hidden = Boolean(q) && !li.dataset.search.includes(q);
         if (!li.hidden) shown++;
       });
+      list.querySelectorAll('.ad-item').forEach((ad) => { ad.hidden = Boolean(q); });   // niente annunci tra i risultati
       showCount(shown);
     });
   }

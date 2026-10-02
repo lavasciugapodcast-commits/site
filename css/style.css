@@ -452,6 +452,32 @@ body.has-mini { padding-bottom: 72px; }
 }
 .dialog-close:hover { background: var(--paper-2); }
 
+/* ---------- Spazi pubblicitari (js/main.js) ---------- */
+/* Discreti: etichetta "Pubblicità", filo sottile, spazio riservato così la pagina non salta quando arriva l'annuncio */
+.ad-slot { display: block; margin: 40px 0; padding-top: 6px; border-top: 1px solid var(--line-soft); }
+.ad-label { display: block; margin-bottom: 8px; font: 500 0.68rem var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.ad-box { min-height: 100px; }
+.ad-articolo { max-width: 62ch; margin: 2em 0; }
+.ad-articolo .ad-box { min-height: 250px; }
+li.ad-item { list-style: none; margin: 0; padding: 18px 0; border-top: 0; border-bottom: 1px solid var(--line-soft); }
+/* Segnaposto visibili solo in locale o con ?annunci, per valutare le posizioni */
+.ad-box:not(:has(ins)) {
+  display: grid; place-items: center; text-align: center; padding: 12px;
+  border: 1px dashed var(--line-soft); background: var(--paper-2);
+  font: 500 0.75rem var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+}
+
+/* ---------- Copertina articolo e tabelle (pagine privacy/cookie) ---------- */
+.article-cover { max-width: 62ch; margin-top: 28px; }
+.article-cover img { width: 100%; height: auto; border: 2px solid var(--line); }
+.prose img { max-width: 100%; height: auto; }
+.prose table { width: 100%; margin: 1em 0; border-collapse: collapse; font-size: 0.95rem; }
+.prose th, .prose td { padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line-soft); text-align: left; vertical-align: top; }
+.prose th { font: 500 0.75rem var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); border-bottom: 2px solid var(--line); }
+.prose td code { font: 500 0.85rem var(--mono); color: var(--teal-ink); }
+.table-wrap { overflow-x: auto; }
+.legal-updated { margin-top: 18px; font: 500 0.8rem var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+
 /* ---------- Mobile ---------- */
 @media (max-width: 1120px) {
   .menu-toggle { display: block; }

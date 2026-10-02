@@ -3,3 +3,11 @@ Thumbs.db
 node_modules/
 .vscode/
 *.log
+
+# Jekyll (anteprima locale)
+_site/
+.jekyll-cache/
+.jekyll-metadata
+Gemfile.lock
+vendor/
+.bundle/
