@@ -112,7 +112,35 @@ img { max-width: 100%; display: block; }
   font-weight: 800; font-stretch: 110%; font-size: 1rem; letter-spacing: 0.02em;
 }
 .main-nav a:hover { color: var(--charcoal); background: var(--teal); }
-.main-nav a[aria-current="page"] { background: var(--pink); color: var(--charcoal); }
+.main-nav a[aria-current="page"], .main-nav a.is-current { background: var(--pink); color: var(--charcoal); }
+
+/* Sottomenu del Blog (categorie): scende dall'header come una sua continuazione, con la stessa riga turchese */
+.main-nav .has-sub { position: relative; display: flex; align-items: center; }
+.sub-toggle {
+  display: grid; place-items: center; width: 24px; height: 36px; margin-left: -2px; padding: 0;
+  background: none; border: 0; color: var(--on-charcoal); cursor: pointer;
+}
+.sub-toggle svg { width: 16px; height: 16px; transition: transform 0.2s ease; }
+.sub-toggle:hover { color: var(--teal); }
+.main-nav .sub-menu {
+  position: absolute; left: 0; top: calc(100% + 21px); z-index: 25;
+  display: none; flex-direction: column; gap: 0; min-width: 200px; padding: 8px 0;
+  background: var(--charcoal); border-top: 5px solid var(--teal);
+}
+.main-nav .sub-menu::before { content: ""; position: absolute; left: 0; right: 0; top: -26px; height: 26px; }   /* ponte per il mouse */
+.main-nav .sub-menu a { padding: 10px 18px; white-space: nowrap; }
+.has-sub:hover .sub-menu, .has-sub.open .sub-menu { display: flex; }
+.has-sub:hover .sub-toggle svg, .has-sub.open .sub-toggle svg { transform: rotate(180deg); }
+
+/* Scorciatoie alle categorie nella pagina Blog e nelle pagine delle categorie */
+.cat-links { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+.cat-links a {
+  display: inline-block; padding: 7px 12px; border: 2px solid var(--line); color: var(--ink); text-decoration: none;
+  font: 700 0.8rem var(--mono); letter-spacing: 0.08em; text-transform: uppercase;
+}
+.cat-links a:hover { background: var(--teal); border-color: var(--teal); color: var(--charcoal); }
+.cat-links a[aria-current="page"] { background: var(--pink); border-color: var(--pink); color: var(--charcoal); }
+.page-head .kicker a, .entry .meta a { color: inherit; }
 
 /* "Sostieni" (Ko-fi): ultimo elemento del menu, sempre turchese */
 .main-nav .nav-cta { margin-left: 8px; }
@@ -519,7 +547,7 @@ body.has-mini .adblock-notice { bottom: 88px; }   /* sopra la mini barra del pla
 .legal-updated { margin-top: 18px; font: 500 0.8rem var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
 
 /* ---------- Mobile ---------- */
-@media (max-width: 1050px) {
+@media (max-width: 800px) {
   .menu-toggle { display: block; }
   .main-nav {
     display: none;
@@ -537,6 +565,15 @@ body.has-mini .adblock-notice { bottom: 88px; }   /* sopra la mini barra del pla
   .main-nav .nav-cta { margin: 24px 0 0; }
   .main-nav .nav-cta a { justify-content: center; gap: 10px; border-bottom: 0; }
   .main-nav .nav-cta svg { width: 28px; height: 28px; }
+  /* nel menu mobile le categorie sono sempre aperte, rientrate sotto "Blog" */
+  .main-nav .has-sub { display: block; }
+  .sub-toggle { display: none; }
+  .main-nav .sub-menu {
+    position: static; display: flex; min-width: 0; margin: 4px 0 8px 12px; padding: 0 0 0 4px;
+    background: none; border-top: 0; border-left: 3px solid var(--teal);
+  }
+  .main-nav .sub-menu::before { display: none; }
+  .main-nav .sub-menu a { padding: 7px 12px; font-size: 1.25rem; font-stretch: 110%; border-bottom: 0; }
 }
 
 @media (max-width: 600px) {

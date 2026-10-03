@@ -1,4 +1,4 @@
-// Menu mobile (sopra i 1050px il menu è sempre visibile in orizzontale)
+// Menu mobile (sopra gli 800px il menu è sempre visibile in orizzontale)
 const toggle = document.querySelector('.menu-toggle');
 const nav = document.querySelector('.main-nav');
 if (toggle && nav) {
@@ -12,15 +12,37 @@ if (toggle && nav) {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && nav.classList.contains('open')) { setOpen(false); toggle.focus(); }
   });
-  window.matchMedia('(min-width: 1051px)').addEventListener('change', (e) => { if (e.matches) setOpen(false); });
+  window.matchMedia('(min-width: 801px)').addEventListener('change', (e) => { if (e.matches) setOpen(false); });
 }
 
-// Voce attiva nel menu (gli articoli in blog/ accendono "Blog")
+// Voce attiva nel menu. Le pagine delle categorie e gli articoli (in blog/) accendono anche "Blog";
+// negli articoli la categoria arriva da <body data-categoria="..."> (modello _layouts/articolo.html).
 const here = location.pathname;
+const articleCat = document.body.dataset.categoria;
 document.querySelectorAll('.main-nav a').forEach((a) => {
-  const section = a.pathname.replace(/\.html$/, '/');   // ".../blog.html" -> ".../blog/"
   if (a.origin !== location.origin) return;   // es. "Sostieni" su Ko-fi
-  if (a.pathname === here || here.startsWith(section)) a.setAttribute('aria-current', 'page');
+  const section = a.pathname.replace(/\.html$/, '/');   // ".../blog.html" -> ".../blog/"
+  if (a.pathname === here) a.setAttribute('aria-current', 'page');
+  else if (here.startsWith(section) || (articleCat && a.pathname.endsWith(`/${articleCat}.html`))) a.classList.add('is-current');
+});
+document.querySelectorAll('.main-nav .has-sub').forEach((item) => {
+  if (item.querySelector('.sub-menu [aria-current], .sub-menu .is-current')) item.querySelector(':scope > a').classList.add('is-current');
+});
+
+// Sottomenu del Blog: su desktop si apre al passaggio del mouse (CSS) o con la freccia; Esc e clic fuori lo chiudono.
+// Nel menu mobile le categorie sono sempre visibili sotto "Blog".
+document.querySelectorAll('.main-nav .has-sub').forEach((item) => {
+  const btn = item.querySelector('.sub-toggle');
+  const setSub = (open) => {
+    item.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', String(open));
+  };
+  btn.addEventListener('click', (e) => { e.stopPropagation(); setSub(!item.classList.contains('open')); });
+  document.addEventListener('click', (e) => { if (!item.contains(e.target)) setSub(false); });
+  item.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && item.classList.contains('open')) { setSub(false); btn.focus(); }
+  });
+  item.addEventListener('focusout', (e) => { if (!item.contains(e.relatedTarget)) setSub(false); });
 });
 
 // Logo come il cestello di una lavatrice: al passaggio del mouse (o col focus da tastiera) parte e gira di continuo;

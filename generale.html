@@ -6,8 +6,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cucina — Blog — Lavasciuga</title>
-  <meta name="description" content="Ricette, ristoranti e tutto quello che passa dai fornelli. Gli articoli di Lavasciuga.">
+  <title>Generale — Blog — Lavasciuga</title>
+  <meta name="description" content="Riflessioni, opinioni e storie che non stanno in un solo cassetto. Gli articoli di Lavasciuga.">
   <link rel="icon" href="assets/logo-64.png" type="image/png">
   <link rel="apple-touch-icon" href="assets/logo-192.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -56,23 +56,23 @@
 
   <main id="contenuto" class="container">
         <section class="page-head">
-          <span class="kicker"><a href="blog.html">Blog</a> / Cucina</span>
-          <h1>Cucina</h1>
-          <p class="lead">Ricette, ristoranti e tutto quello che passa dai fornelli.</p>
+          <span class="kicker"><a href="blog.html">Blog</a> / Generale</span>
+          <h1>Generale</h1>
+          <p class="lead">Riflessioni, opinioni e storie che non stanno in un solo cassetto.</p>
         </section>
 
         <section class="block">
           <ul class="cat-links" aria-label="Categorie del blog">
-            <li><a href="generale.html">Generale</a></li>
+            <li><a href="generale.html" aria-current="page">Generale</a></li>
             <li><a href="arte.html">Arte</a></li>
             <li><a href="sport.html">Sport</a></li>
-            <li><a href="cucina.html" aria-current="page">Cucina</a></li>
+            <li><a href="cucina.html">Cucina</a></li>
             <li><a href="finanza.html">Finanza</a></li>
           </ul>
-          <!-- Elenco generato da Jekyll dagli articoli con categoria "cucina" (più recente in cima) -->
+          <!-- Elenco generato da Jekyll dagli articoli con categoria "generale" (più recente in cima) -->
           {%- assign mesi = "gen,feb,mar,apr,mag,giu,lug,ago,set,ott,nov,dic" | split: "," -%}
           <ul class="entries" data-annunci-ogni="5">
-            {%- for post in site.categories.cucina %}
+            {%- for post in site.categories.generale %}
             <li class="entry">
               {%- assign m = post.date | date: "%-m" | minus: 1 %}
               <span class="meta"><time datetime="{{ post.date | date: '%Y-%m-%d' }}">{{ post.date | date: "%-d" }} {{ mesi[m] }} {{ post.date | date: "%Y" }}</time></span>

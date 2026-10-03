@@ -1,39 +1,38 @@
 # Lavasciuga — Sito Web
 
-Sito ufficiale di **Lavasciuga** ("Podcast & more"): podcast e articoli di blog, sport, spettacolo (musica, cinema,
-teatro…) e cucina.
+Sito ufficiale di **Lavasciuga** ("Podcast & more"): il podcast e un blog con cinque categorie: Generale, Arte,
+Sport, Cucina, Finanza.
 
 ## Stack
 
 - HTML, CSS e JavaScript "vanilla". **Nessun framework, nessuna dipendenza npm.**
 - **Jekyll solo per il blog**: GitHub Pages costruisce il sito con Jekyll a ogni push (nessuna installazione lato GitHub).
-  Passano dal modello solo i file con front matter (`---` in cima): gli articoli in `_posts/`, `index.html`, `blog.html`,
-  `sport.html`, `spettacolo.html` e `cucina.html`.
+  Passano dal modello solo i file con front matter (`---` in cima): gli articoli in `_posts/`, `index.html`, `blog.html`
+  e le pagine delle categorie (`generale.html`, `arte.html`, `sport.html`, `cucina.html`, `finanza.html`).
   Tutte le altre pagine non hanno front matter e vengono copiate così come sono.
 - Anteprima in locale (Ruby 3.3 in `C:\Ruby33-x64`, gemme in `vendor/` con Bundler, vedi `Gemfile`):
   `bundle exec jekyll serve --host 0.0.0.0 --port 8080 --baseurl ""` (prima volta: `bundle install`).
   Si aggiorna da solo quando cambi un file. Da telefono (stessa Wi-Fi): `http://<IP-del-PC>:8080`.
-  Con `python -m http.server 8080` si vedono tutte le pagine tranne articoli ed elenchi di articoli (home e sezioni).
+  Con `python -m http.server 8080` si vedono tutte le pagine tranne articoli ed elenchi di articoli (home, blog, categorie).
 - `Gemfile` usa `github-pages`: stesse versioni di Jekyll e plugin di GitHub Pages (Jekyll 3.10). `_site/`, `vendor/`,
   `Gemfile.lock` non vanno nel repository (`.gitignore`).
 
 ## Struttura
 
 ```
-index.html        Home: claim, player con l'ultimo episodio + 3 precedenti, ultimo articolo di ogni sezione
+index.html        Home: claim, player con l'ultimo episodio + 3 precedenti, "Dal blog" con gli ultimi 3 articoli
 podcast.html      Player, link alle piattaforme, elenco di tutti gli episodi con ricerca
-blog.html         Articoli della sezione blog, generati da Jekyll (più recente in cima)
-sport.html        Articoli della sezione sport
-spettacolo.html   Articoli della sezione spettacolo (musica, cinema, teatro…)
-cucina.html       Articoli della sezione cucina
+blog.html         Tutti gli articoli, con la categoria accanto alla data (generati da Jekyll, più recente in cima)
+generale.html, arte.html, sport.html, cucina.html, finanza.html
+                  Una pagina per categoria del blog (voci del sottomenu "Blog")
 _data/autori/     Profili degli autori, uno per file (<id>.yml): nome, foto, bio, social
-_posts/           Articoli in Markdown: AAAA-MM-GG-slug.md  ->  /<sezione>/slug.html
+_posts/           Articoli in Markdown: AAAA-MM-GG-slug.md  ->  /blog/slug.html
 _layouts/         articolo.html: modello della pagina articolo
 _config.yml       Configurazione Jekyll (indirizzi degli articoli, file esclusi)
 admin/            Pannello per i collaboratori (Sveltia CMS): index.html + config.yml
 privacy.html      Privacy policy
 cookie.html       Cookie policy
-contatti.html     Email e social
+contatti.html     Email (lavasciuga.podcast@gmail.com) e social
 about.html        Chi siamo
 css/style.css     Unico foglio di stile (palette del logo in :root, dark mode inclusa)
 js/main.js        Menu mobile, voce attiva, anno nel footer, tema chiaro/scuro
@@ -46,7 +45,10 @@ media/            Originali ad alta risoluzione (logo 2048px): non linkarli dall
 
 - Header antracite con solo il logo (il nome è già nel logo), grande, che sborda sotto la riga turchese (`--logo`,
   `--head-top` in `:root`), e il menu orizzontale allineato a destra.
-  Sotto i 1050px il menu diventa un pannello a tutto schermo aperto dal pulsante "Menu"; sotto i 600px logo e header si rimpiccioliscono.
+  Menu: Podcast · Blog ▾ · Contatti · About · Sostieni. "Blog" ha un sottomenu con le categorie (`.has-sub`, `.sub-menu`):
+  su desktop si apre al passaggio del mouse o con la freccia (`.sub-toggle`), Esc e clic fuori lo chiudono; nel menu
+  mobile le categorie sono sempre visibili, rientrate. Pagine delle categorie e articoli accendono "Blog" (`.is-current`).
+  Sotto gli 800px il menu diventa un pannello a tutto schermo aperto dal pulsante "Menu"; sotto i 600px logo e header si rimpiccioliscono.
 - Colori dal logo: antracite `--charcoal`, rosa cervello `--pink`, turchese acqua `--teal`, crema cartellino `--paper`.
   Il rosa e il turchese chiaro sono per sfondi/riempimenti, non per testo su crema (contrasto basso): per il testo usare `--teal-ink` / `--pink-deep`.
 - Font: Archivo (titoli larghi e pesanti, come la scritta del logo) + IBM Plex Mono per etichette e date, da Google Fonts.
@@ -79,13 +81,14 @@ media/            Originali ad alta risoluzione (logo 2048px): non linkarli dall
 - Mobile-first: verifica sempre il layout a 375px di larghezza.
 - Accessibilità: HTML semantico (`header`, `nav`, `main`, `article`, `footer`), contrasto sufficiente, ogni immagine con `alt`.
 - I contenuti segnaposto sono marcati con il commento `<!-- TODO: contenuto reale -->`.
-- Nuova pagina: copia `about.html` come base, aggiorna `<title>`, meta description e aggiungi il link nel menu (`.main-nav`) di tutte le pagine.
+- Nuova pagina: copia `about.html` come base, aggiorna `<title>`, meta description e aggiungi il link nel menu (`.main-nav`) di tutte le pagine
+  (e in `_layouts/articolo.html`, dove i percorsi iniziano con `../`).
 
 ## Sostieni (Ko-fi)
 
 - Link: `https://ko-fi.com/lavasciugapodcast` (costante `KOFI_URL` in `js/main.js`).
 - Pulsante "Sostieni" turchese come ultima voce del menu (`<li class="nav-cta">`) in **tutte** le pagine, più "Ko-fi" nel footer.
-  Se il menu cresce ancora, ricontrolla che stia su una riga a 1051px (sotto passa al menu mobile). Oggi l'header ne occupa 1009px.
+  Se il menu cresce ancora, ricontrolla che stia su una riga a 801px (sotto passa al menu mobile). Oggi l'header ne occupa 738px.
 - Banner negli articoli: li aggiunge `js/main.js` da solo, uno a metà del testo (articoli di almeno ~250 parole) e uno
   in fondo. La posizione si misura sulla lunghezza del testo (`textBreak`), quindi funziona anche senza titoletti: se c'è
   un `<h2>` vicino al punto giusto cade prima di quello, altrimenti tra due paragrafi. Per sceglierne la posizione a mano: `<div data-sostieni></div>` nel testo
@@ -94,30 +97,29 @@ media/            Originali ad alta risoluzione (logo 2048px): non linkarli dall
 - Popup "Ciclo completo!" a fine puntata (`js/podcast.js`): negli ultimi 20 secondi o alla fine dell'episodio, una volta
   per episodio (`localStorage` "sostieni-<id>"). È un `<dialog>` modale: Esc, clic fuori o "Non ora" lo chiudono.
 
-## Articoli (Blog, Sport, Spettacolo, Cucina)
+## Articoli e categorie del blog
 
-- Un solo tipo di articolo per tre sezioni. Ogni articolo è un file Markdown in `_posts/AAAA-MM-GG-slug.md` con il campo
-  `categories` = `blog`, `sport`, `spettacolo` o `cucina`: decide la pagina in cui compare e l'indirizzo
-  (`/spettacolo/slug.html`).
-  **Va sempre scritto** (il pannello lo fa da solo, "Blog" preselezionato): un articolo senza finisce in `/slug.html`
-  e in nessun elenco. Niente valore predefinito in `_config.yml`: Jekyll lo sommerebbe a quello dell'articolo.
-- La pagina la genera `_layouts/articolo.html` (sezione nel kicker e nel link "Tutti gli articoli di …"); gli elenchi in
-  `blog.html`, `sport.html`, `spettacolo.html`, `cucina.html` (`site.categories.<sezione>`) e l'ultimo articolo di ogni
-  sezione in home
-  li genera Jekyll: **non si scrivono a mano**.
-- Campi in testa al file (front matter): `title`, `categories` (sezione), `categoria` (Musica, Cinema, Opinioni…, compare
-  accanto alla sezione), `evidenzia` (parole del titolo da mettere in rosa, facoltativo), `lead` (sottotitolo), `date`,
-  `autore` (id di un profilo in `_data/autori/`), `copertina` + `copertina_alt` (facoltativi), `episodio` (link Spreaker dell'episodio collegato: il box
-  "Ne abbiamo parlato in puntata" si completa da solo con l'API), `nota` (avviso in cima).
-- Nuova sezione: aggiungere l'opzione in `admin/config.yml` (campo Sezione), una pagina come `spettacolo.html`, il `case`
-  in `_layouts/articolo.html`, la colonna in `index.html` e la voce di menu in tutte le pagine (ricontrollare la
-  larghezza del menu, vedi sezione Sostieni).
+- Ogni articolo è un file Markdown in `_posts/AAAA-MM-GG-slug.md`; l'indirizzo è sempre `/blog/slug.html`, qualunque sia la
+  categoria (cambiarla non rompe il link). La categoria è il campo `categories`: `generale`, `arte`, `sport`, `cucina`
+  o `finanza`. **Va sempre scritta** (il pannello lo fa da solo, "Generale" preselezionato): senza, l'articolo non compare in
+  nessuna pagina di categoria. Niente valore predefinito in `_config.yml`: Jekyll lo sommerebbe a quello dell'articolo.
+- `blog.html` elenca tutti gli articoli (`site.posts`), le pagine delle categorie solo i loro (`site.categories.<cat>`),
+  la home gli ultimi 3 ("Dal blog"). Li genera Jekyll: **non si scrivono a mano**. Blog e categorie hanno in cima le
+  scorciatoie alle cinque categorie (`.cat-links`).
+- La pagina la genera `_layouts/articolo.html`: in cima "Blog / Categoria", in fondo "← Tutti gli articoli di …";
+  `<body data-categoria="...">` serve a `js/main.js` per accendere la voce giusta del menu.
+- Campi in testa al file (front matter): `title`, `categories` (categoria), `evidenzia` (parole del titolo da mettere in
+  rosa, facoltativo), `lead` (sottotitolo), `date`, `autore` (id di un profilo in `_data/autori/`), `copertina` +
+  `copertina_alt` (facoltativi), `episodio` (link Spreaker dell'episodio collegato: il box "Ne abbiamo parlato in
+  puntata" si completa da solo con l'API), `nota` (avviso in cima).
+- Nuova categoria: opzione in `admin/config.yml` (campo Categoria), pagina come `arte.html` (e voce in `.cat-links` di
+  tutte le pagine di blog/categoria), `case` in `_layouts/articolo.html`, voce nel sottomenu di tutte le pagine.
 - Il modo normale di scrivere è il pannello `/admin`; a mano basta creare il file con gli stessi campi.
 - Tempo di lettura e data in italiano li calcola il modello (~200 parole al minuto).
 - Le immagini caricate dal pannello vanno in `assets/blog/` e nel testo hanno percorso `/assets/blog/...`: il modello
   lo corregge in `../assets/blog/...` (il sito sta in una sottocartella finché non c'è il dominio).
-- Gli articoli `2026-10-01-ciclo-delicato.md` e `2026-10-02-articolo-di-prova.md` sono esempi (il primo marcato TODO):
-  vanno sostituiti o cancellati.
+- Primo articolo vero: `2026-10-03-nasce-il-sito-di-lavasciuga.md` (Generale). Gli articoli `2026-10-01-ciclo-delicato.md`
+  e `2026-10-02-articolo-di-prova.md` (Generale) sono esempi (il primo marcato TODO): vanno sostituiti o cancellati.
 
 ## Autori e box "Chi è l'autore"
 
@@ -178,7 +180,7 @@ media/            Originali ad alta risoluzione (logo 2048px): non linkarli dall
 - [x] Logo in `assets/`
 - [ ] Immagini reali (foto, copertine)
 - [ ] Link alle piattaforme del podcast (Spotify, Apple Podcasts, YouTube)
-- [ ] Primi articoli veri (ora ci sono solo i due di prova nel Blog; Sport e Spettacolo sono vuote)
+- [ ] Primi articoli veri (c'è "Nasce il sito" in Generale più i due di prova; Arte, Sport, Cucina, Finanza sono vuote)
 - [x] Hosting: GitHub Pages
 - [ ] Dominio nostro, poi AdSense
 - [ ] Dati del titolare in privacy/cookie policy

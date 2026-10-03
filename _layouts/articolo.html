@@ -1,4 +1,6 @@
-<!-- Modello degli articoli del blog: i testi arrivano dai file in _posts/ (scritti a mano o dal pannello /admin) -->
+{%- comment %} Modello degli articoli del blog: i testi arrivano dai file in _posts/ (scritti a mano o dal pannello /admin) {% endcomment -%}
+{%- assign sezione = page.categories | first | default: "generale" -%}
+        {%- case sezione -%}{%- when "arte" -%}{%- assign sezione_nome = "Arte" -%}{%- when "sport" -%}{%- assign sezione_nome = "Sport" -%}{%- when "cucina" -%}{%- assign sezione_nome = "Cucina" -%}{%- when "finanza" -%}{%- assign sezione_nome = "Finanza" -%}{%- else -%}{%- assign sezione = "generale" -%}{%- assign sezione_nome = "Generale" -%}{%- endcase %}
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -19,7 +21,7 @@
   <!-- Tema scelto col pulsante sole/luna: applicato prima del disegno per evitare il lampo -->
   <script>(function(){var r=document.documentElement,t=null;try{t=localStorage.getItem('tema')}catch(e){}if(t==='light'||t==='dark')r.dataset.theme=t;else t=null;if(t?t==='dark':matchMedia('(prefers-color-scheme: dark)').matches)r.classList.add('is-dark')})();</script>
 </head>
-<body>
+<body data-categoria="{{ sezione }}">
   <a class="skip-link" href="#contenuto">Vai al contenuto</a>
 
   <header class="site-header">
@@ -30,10 +32,17 @@
       <nav class="main-nav" id="menu" aria-label="Navigazione principale">
         <ul>
           <li><a href="../podcast.html">Podcast</a></li>
-          <li><a href="../blog.html">Blog</a></li>
-          <li><a href="../sport.html">Sport</a></li>
-          <li><a href="../spettacolo.html">Spettacolo</a></li>
-          <li><a href="../cucina.html">Cucina</a></li>
+          <li class="has-sub">
+            <a href="../blog.html">Blog</a>
+            <button class="sub-toggle" type="button" aria-expanded="false" aria-controls="sottomenu-blog" aria-label="Categorie del blog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+            <ul class="sub-menu" id="sottomenu-blog">
+              <li><a href="../generale.html">Generale</a></li>
+              <li><a href="../arte.html">Arte</a></li>
+              <li><a href="../sport.html">Sport</a></li>
+              <li><a href="../cucina.html">Cucina</a></li>
+              <li><a href="../finanza.html">Finanza</a></li>
+            </ul>
+          </li>
           <li><a href="../contatti.html">Contatti</a></li>
           <li><a href="../about.html">About</a></li>
           <li class="nav-cta"><a href="https://ko-fi.com/lavasciugapodcast" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 9h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8 3.5v2M12 3.5v2"/></svg>Sostieni</a></li>
@@ -53,15 +62,14 @@
         {%- assign mesi = "gennaio,febbraio,marzo,aprile,maggio,giugno,luglio,agosto,settembre,ottobre,novembre,dicembre" | split: "," -%}
         {%- assign mese = page.date | date: "%-m" | minus: 1 -%}
         {%- assign minuti = content | strip_html | number_of_words | plus: 100 | divided_by: 200 | at_least: 1 -%}
-        {%- assign sezione = page.categories | first | default: "blog" -%}
-        {%- case sezione -%}{%- when "sport" -%}{%- assign sezione_nome = "Sport" -%}{%- when "spettacolo" -%}{%- assign sezione_nome = "Spettacolo" -%}{%- when "cucina" -%}{%- assign sezione_nome = "Cucina" -%}{%- else -%}{%- assign sezione = "blog" -%}{%- assign sezione_nome = "Blog" -%}{%- endcase %}
+
         {%- comment %} Autore: id di un file in _data/autori/ (gestiti dal pannello, collezione "Autori").
              Se non c'è un profilo con quell'id, si mostra il testo così com'è e niente box. {% endcomment -%}
         {%- assign autore = site.data.autori[page.autore] -%}
         {%- if autore -%}{%- assign autore_nome = autore.nome -%}{%- else -%}{%- assign autore_nome = page.autore -%}{%- endif %}
         <article class="article">
           <header class="page-head article-head">
-            <p class="kicker"><a href="../{{ sezione }}.html">{{ sezione_nome }}</a>{% if page.categoria %} · {{ page.categoria | escape }}{% endif %}</p>
+            <p class="kicker"><a href="../blog.html">Blog</a> / <a href="../{{ sezione }}.html">{{ sezione_nome }}</a></p>
             {%- if page.evidenzia and page.evidenzia != "" %}
             {%- assign cerca = page.evidenzia | escape %}
             {%- capture parola %}<span class="hl">{{ cerca }}</span>{% endcapture %}

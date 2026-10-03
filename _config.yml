@@ -8,10 +8,10 @@ kramdown:
   input: GFM
   hard_wrap: false
 
-# Articoli: _posts/AAAA-MM-GG-slug.md  ->  /<sezione>/slug.html
-# La sezione è il campo "categories" dell'articolo: blog, sport o spettacolo. Va sempre scritta nell'articolo
+# Articoli: _posts/AAAA-MM-GG-slug.md  ->  /blog/slug.html, qualunque sia la categoria (cambiarla non rompe il link).
+# La categoria è il campo "categories": generale, arte, sport, cucina o finanza. Va sempre scritta nell'articolo
 # (il pannello /admin lo fa da solo): un valore predefinito qui verrebbe sommato a quello dell'articolo.
-permalink: /:categories/:title:output_ext
+permalink: /blog/:title:output_ext
 defaults:
   - scope:
       path: ""

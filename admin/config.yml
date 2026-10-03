@@ -36,11 +36,11 @@ collections:
   - name: articoli
     label: Articoli
     label_singular: Articolo
-    description: Gli articoli di Blog, Sport, Spettacolo e Cucina. Ogni articolo pubblicato va online in un paio di minuti.
+    description: Gli articoli del blog (Generale, Arte, Sport, Cucina, Finanza). Ogni articolo pubblicato va online in un paio di minuti.
     folder: _posts
     create: true
     delete: true
-    # Jekyll vuole i nomi file AAAA-MM-GG-titolo.md; l'indirizzo sul sito sarà /<sezione>/titolo.html
+    # Jekyll vuole i nomi file AAAA-MM-GG-titolo.md; l'indirizzo sul sito sarà /blog/titolo.html
     slug: "{{date | date('YYYY-MM-DD')}}-{{slug}}"
     summary: "{{title}} · {{categories}} · {{date | date('D/M/YYYY')}} · {{autore}}"
     sortable_fields: [date, title, autore]
@@ -63,39 +63,19 @@ collections:
         type: date
         format: YYYY-MM-DD
         default: "{{now}}"
-      # Sezione del sito in cui compare l'articolo; decide anche l'indirizzo (/blog/..., /sport/..., /spettacolo/..., /cucina/...)
+      # Categoria del blog: decide in quale pagina (e voce del sottomenu Blog) compare l'articolo.
+      # L'indirizzo resta /blog/titolo.html qualunque sia la categoria.
       - name: categories
-        label: Sezione
-        widget: select
-        options:
-          - { label: Blog, value: blog }
-          - { label: Sport, value: sport }
-          - { label: Spettacolo (musica, cinema, teatro…), value: spettacolo }
-          - { label: Cucina, value: cucina }
-        default: blog
-        hint: "La pagina del sito in cui compare l'articolo."
-      - name: categoria
         label: Categoria
         widget: select
         options:
-          - Opinioni
-          - Approfondimenti
-          - Interviste
-          - Recensioni
-          - Dietro le quinte
-          - Musica
-          - Cinema
-          - Serie TV
-          - Teatro
-          - Libri
-          - Calcio
-          - Basket
-          - Tennis
-          - Football americano
-          - Ricette
-          - Ristoranti
-        default: Opinioni
-        hint: "Compare accanto alla sezione, sopra il titolo e nell'elenco degli articoli."
+          - { label: Generale, value: generale }
+          - { label: Arte (musica, cinema, teatro, libri…), value: arte }
+          - { label: Sport, value: sport }
+          - { label: Cucina, value: cucina }
+          - { label: Finanza, value: finanza }
+        default: generale
+        hint: "La categoria del blog in cui compare l'articolo."
       # Un profilo della collezione "Autori" (nel file resta il suo id, es. redazione-lavasciuga)
       - name: autore
         label: Autore

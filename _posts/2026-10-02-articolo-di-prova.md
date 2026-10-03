@@ -2,9 +2,8 @@
 title: Articolo di prova
 evidenzia: prova
 lead: Vediamo se funziona questo strumento
-categories: blog
+categories: generale
 date: 2026-10-02
-categoria: Opinioni
 autore: redazione-lavasciuga
 copertina: /assets/blog/ASSET_MMS_84974603.webp
 copertina_alt: lavasciuga

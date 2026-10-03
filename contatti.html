@@ -25,10 +25,17 @@
       <nav class="main-nav" id="menu" aria-label="Navigazione principale">
         <ul>
           <li><a href="podcast.html">Podcast</a></li>
-          <li><a href="blog.html">Blog</a></li>
-          <li><a href="sport.html">Sport</a></li>
-          <li><a href="spettacolo.html">Spettacolo</a></li>
-          <li><a href="cucina.html">Cucina</a></li>
+          <li class="has-sub">
+            <a href="blog.html">Blog</a>
+            <button class="sub-toggle" type="button" aria-expanded="false" aria-controls="sottomenu-blog" aria-label="Categorie del blog"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+            <ul class="sub-menu" id="sottomenu-blog">
+              <li><a href="generale.html">Generale</a></li>
+              <li><a href="arte.html">Arte</a></li>
+              <li><a href="sport.html">Sport</a></li>
+              <li><a href="cucina.html">Cucina</a></li>
+              <li><a href="finanza.html">Finanza</a></li>
+            </ul>
+          </li>
           <li><a href="contatti.html">Contatti</a></li>
           <li><a href="about.html">About</a></li>
           <li class="nav-cta"><a href="https://ko-fi.com/lavasciugapodcast" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M17 9h1.5a2.5 2.5 0 0 1 0 5H17"/><path d="M8 3.5v2M12 3.5v2"/></svg>Sostieni</a></li>
@@ -46,15 +53,15 @@
 
   <main id="contenuto" class="container">
         <section class="page-head">
-          <span class="kicker">06 — Contatti</span>
+          <span class="kicker">03 — Contatti</span>
           <h1>Contatti</h1>
           <p class="lead">Proposte, collaborazioni, idee per una puntata o semplicemente due chiacchiere.</p>
         </section>
 
         <section class="block">
-          <!-- TODO: contenuto reale (email e profili social) -->
+          <!-- TODO: contenuto reale (profili social) -->
           <ul class="contact-list">
-            <li><span class="label">Email</span><a href="#">indirizzo in arrivo</a></li>
+            <li><span class="label">Email</span><a href="mailto:lavasciuga.podcast@gmail.com">lavasciuga.podcast@gmail.com</a></li>
             <li><span class="label">Podcast</span><a href="https://www.spreaker.com/podcast/lavasciuga--6470341">Lavasciuga su Spreaker</a></li>
             <li><span class="label">Instagram</span><a href="#">@lavasciuga</a></li>
             <li><span class="label">YouTube</span><a href="#">Lavasciuga</a></li>
