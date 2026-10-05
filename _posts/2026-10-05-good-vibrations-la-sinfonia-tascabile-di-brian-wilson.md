@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 title: Good Vibrations, la sinfonia tascabile di Brian Wilson
 evidenzia: Good Vibrations
 lead: Come un esperimento può fare classifica
