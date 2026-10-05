@@ -201,7 +201,7 @@ if (prose) {
     // "Ti sta piacendo?" a metà, solo se l'articolo è abbastanza lungo (~250 parole)
     const middle = proseLength >= 1500 ? textBreak(prose, 0.5) : null;
     if (middle) prose.insertBefore(supportBanner(), middle);
-    (document.querySelector('.article .author-box') || prose).after(supportBanner('Ti è piaciuto?'));
+    (document.querySelector('.article .author-box') || document.querySelector('.article .article-links') || prose).after(supportBanner('Ti è piaciuto?'));
   }
 }
 

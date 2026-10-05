@@ -118,7 +118,9 @@ caroselli/        Caroselli Instagram in HTML (esclusi dal sito pubblicato, vedi
 - Campi in testa al file (front matter): `published`, `title`, `categories` (categoria), `evidenzia` (parole del titolo da mettere in
   rosa, facoltativo), `lead` (sottotitolo), `date`, `autore` (id di un profilo in `_data/autori/`), `copertina` +
   `copertina_alt` (facoltativi), `episodio` (link Spreaker dell'episodio collegato: il box "Ne abbiamo parlato in
-  puntata" si completa da solo con l'API), `nota` (avviso in cima).
+  puntata" si completa da solo con l'API), `nota` (avviso in cima), `link` (lista di `titolo` + `url` + `nota`
+  facoltativa: box "Da ascoltare, guardare, leggere" dopo il testo, prima del box autore; la piattaforma (YouTube,
+  Spotify…) la ricava il modello dall'indirizzo, altrimenti mostra il dominio. Solo link, niente video incorporati).
 - Nuova categoria: opzione in `admin/config.yml` (campo Categoria), pagina come `arte.html` (e voce in `.cat-links` di
   tutte le pagine di blog/categoria), `case` in `_layouts/articolo.html`, voce nel sottomenu di tutte le pagine.
 - Il modo normale di scrivere è il pannello `/admin`; a mano basta creare il file con gli stessi campi.

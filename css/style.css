@@ -482,6 +482,19 @@ li.ad-item { list-style: none; margin: 0; padding: 18px 0; border-top: 0; border
   font: 500 0.75rem var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
 }
 
+/* ---------- Link citati nell'articolo (campo "link", _layouts/articolo.html) ---------- */
+.article-links { max-width: 62ch; margin-top: 40px; padding-top: 22px; border-top: 2px solid var(--line); }
+.article-links-title { margin-top: 4px; font-weight: 900; font-stretch: 112%; font-size: 1.5rem; line-height: 1.15; }
+.article-links ul { list-style: none; margin-top: 12px; }
+.article-links li { padding: 12px 0; border-bottom: 1px solid var(--line-soft); }
+.article-links a { display: block; color: var(--ink); font-weight: 700; line-height: 1.4; text-decoration: none; }
+.article-links a:hover { color: var(--teal-ink); text-decoration: underline; }
+.article-links-src {
+  display: block; margin-bottom: 2px; color: var(--teal-ink);
+  font: 500 0.72rem var(--mono); letter-spacing: 0.1em; text-transform: uppercase;
+}
+.article-links p { margin-top: 4px; color: var(--muted); font-size: 0.95rem; line-height: 1.55; }
+
 /* ---------- Box "Chi è l'autore" (fine articolo, _layouts/articolo.html) ---------- */
 .author-box {
   display: grid; grid-template-columns: 112px minmax(0, 1fr); gap: 22px; align-items: start;

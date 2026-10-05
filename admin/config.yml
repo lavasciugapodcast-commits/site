@@ -111,6 +111,28 @@ collections:
         widget: string
         required: false
         hint: "Facoltativo. Incolla il link dell'episodio su Spreaker: in fondo all'articolo comparirà il box 'Ne abbiamo parlato in puntata'."
+      # Box "Da ascoltare, guardare, leggere" in fondo all'articolo, prima del box dell'autore
+      - name: link
+        label: Link
+        label_singular: Link
+        widget: list
+        required: false
+        summary: "{{titolo}}"
+        hint: "Facoltativo. Canzoni, video, articoli citati: compaiono in un elenco in fondo all'articolo, con il nome della piattaforma (YouTube, Spotify…) riconosciuto dall'indirizzo."
+        fields:
+          - name: titolo
+            label: Titolo
+            widget: string
+            hint: "Cosa si apre, es. Fabrizio De André — La guerra di Piero"
+          - name: url
+            label: Indirizzo completo
+            widget: string
+            pattern: ['^https?://', "Deve iniziare con https://"]
+          - name: nota
+            label: Nota
+            widget: string
+            required: false
+            hint: "Facoltativa. Una riga di contesto, es. Ascoltatela prima di leggere il secondo paragrafo."
       - name: body
         label: Testo
         widget: markdown

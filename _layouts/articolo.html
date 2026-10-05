@@ -94,6 +94,39 @@
           <div class="prose">
 {{ content | replace: 'src="/assets/', 'src="../assets/' }}
           </div>
+          {%- if page.link and page.link.size > 0 %}
+
+          <!-- Link citati (campo "link" dell'articolo): la piattaforma la ricava dall'indirizzo -->
+          <aside class="article-links" aria-labelledby="link-titolo">
+            <span class="kicker">Link</span>
+            <h2 class="article-links-title" id="link-titolo">Da ascoltare, guardare, leggere</h2>
+            <ul>
+              {%- for l in page.link %}
+              {%- assign host = l.url | split: "/" | slice: 2 | first | downcase | remove_first: "www." %}
+              {%- assign inizio = host | slice: 0, 2 %}{% if inizio == "m." %}{% assign host = host | remove_first: "m." %}{% endif %}
+              {%- case host %}
+              {%- when "youtube.com", "youtu.be" %}{% assign fonte = "YouTube" %}
+              {%- when "music.youtube.com" %}{% assign fonte = "YouTube Music" %}
+              {%- when "open.spotify.com", "spotify.com", "spotify.link" %}{% assign fonte = "Spotify" %}
+              {%- when "music.apple.com", "podcasts.apple.com" %}{% assign fonte = "Apple" %}
+              {%- when "soundcloud.com" %}{% assign fonte = "SoundCloud" %}
+              {%- when "vimeo.com" %}{% assign fonte = "Vimeo" %}
+              {%- when "instagram.com" %}{% assign fonte = "Instagram" %}
+              {%- when "tiktok.com" %}{% assign fonte = "TikTok" %}
+              {%- when "spreaker.com" %}{% assign fonte = "Spreaker" %}
+              {%- when "it.wikipedia.org", "en.wikipedia.org" %}{% assign fonte = "Wikipedia" %}
+              {%- else %}{% assign fonte = host %}
+              {%- endcase %}
+              <li>
+                <a href="{{ l.url | escape }}" target="_blank" rel="noopener"><span class="article-links-src">{{ fonte | escape }}</span>{{ l.titolo | default: l.url | escape }} ↗</a>
+                {%- if l.nota and l.nota != "" %}
+                <p>{{ l.nota | escape }}</p>
+                {%- endif %}
+              </li>
+              {%- endfor %}
+            </ul>
+          </aside>
+          {%- endif %}
           {%- if autore %}
 
           <aside class="author-box" id="autore" aria-labelledby="autore-nome">
