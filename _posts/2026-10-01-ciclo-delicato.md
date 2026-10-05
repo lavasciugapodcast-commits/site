@@ -1,13 +1,14 @@
 ---
-published: true
+published: false
 title: Notizie a ciclo delicato
 evidenzia: ciclo delicato
-lead: "Scrolliamo, leggiamo un titolo, ci indigniamo, passiamo oltre. E se il problema non fossero le notizie, ma la centrifuga in cui le infiliamo?"
-categories: generale
+lead: Scrolliamo, leggiamo un titolo, ci indigniamo, passiamo oltre. E se il problema non fossero le notizie, ma la centrifuga in cui le infiliamo?
 date: 2026-10-01
+categories: generale
 autore: redazione-lavasciuga
+copertina: ''
+copertina_alt: ''
 episodio: https://www.spreaker.com/episode/050-speciale-estate-2026-il-caso-baresi-e-la-qualita-dell-informazione-al-tempo-dei-social-media--73897509
-# TODO: contenuto reale. Articolo di esempio per provare l'impaginazione: sostituire o cancellare
 nota: Articolo di esempio, scritto per provare l'impaginazione del blog.
 ---
 
