@@ -109,7 +109,13 @@ caroselli/        Caroselli Instagram in HTML (esclusi dal sito pubblicato, vedi
   scorciatoie alle cinque categorie (`.cat-links`).
 - La pagina la genera `_layouts/articolo.html`: in cima "Blog / Categoria", in fondo "← Tutti gli articoli di …";
   `<body data-categoria="...">` serve a `js/main.js` per accendere la voce giusta del menu.
-- Campi in testa al file (front matter): `title`, `categories` (categoria), `evidenzia` (parole del titolo da mettere in
+- **Bozze**: il campo `published` (nel pannello l'interruttore "Online") decide se l'articolo è sul sito. Gli articoli nuovi
+  nascono con `published: false`: il file è salvato nel repository ma Jekyll non crea la pagina e non lo mette negli elenchi.
+  Accenderlo e salvare lo pubblica; spegnerlo lo toglie dal sito senza cancellarlo. Nel pannello l'elenco mostra
+  "Bozza"/"Online" e ha i filtri "Bozze (offline)" e "Online". Senza il campo Jekyll pubblica: negli articoli scritti a mano
+  metterlo sempre. Il repository è pubblico, quindi il testo delle bozze è leggibile su GitHub da chi lo cerca: non è
+  un posto per contenuti riservati. In locale le bozze si vedono aggiungendo `--unpublished` a `jekyll serve`.
+- Campi in testa al file (front matter): `published`, `title`, `categories` (categoria), `evidenzia` (parole del titolo da mettere in
   rosa, facoltativo), `lead` (sottotitolo), `date`, `autore` (id di un profilo in `_data/autori/`), `copertina` +
   `copertina_alt` (facoltativi), `episodio` (link Spreaker dell'episodio collegato: il box "Ne abbiamo parlato in
   puntata" si completa da solo con l'API), `nota` (avviso in cima).
@@ -150,6 +156,9 @@ caroselli/        Caroselli Instagram in HTML (esclusi dal sito pubblicato, vedi
   Il pannello salva con un commit su `main` del repository `lavasciugapodcast-commits/site`; GitHub Pages ricostruisce.
 - **Accesso**: nessuna password nel sito. Si entra con GitHub; serve essere collaboratori del repository con permesso di
   scrittura (GitHub → Settings → Collaborators). Togliere qualcuno da lì = non può più pubblicare.
+  Scelta attuale: **solo l'account `lavasciugapodcast-commits`** (nessun collaboratore). Chiunque può aprire `/admin`,
+  ma senza permesso di scrittura sul repository non entra né salva. Gli articoli dei collaboratori arrivano per email
+  e li carica la redazione.
   - Oggi: "Accedi con Token di Accesso" (`auth_methods: [token]`): il pannello porta alla pagina GitHub per creare il token.
   - Pulsante "Accedi con GitHub": serve un'OAuth App su GitHub + Sveltia CMS Authenticator su Cloudflare Workers
     (gratuito, https://github.com/sveltia/sveltia-cms-auth); poi `base_url` e `auth_methods: [oauth, token]` in config.yml.

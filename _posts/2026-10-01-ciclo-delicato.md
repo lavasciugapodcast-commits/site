@@ -1,4 +1,5 @@
 ---
+published: true
 title: Notizie a ciclo delicato
 evidenzia: ciclo delicato
 lead: "Scrolliamo, leggiamo un titolo, ci indigniamo, passiamo oltre. E se il problema non fossero le notizie, ma la centrifuga in cui le infiliamo?"

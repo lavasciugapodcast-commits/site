@@ -36,15 +36,25 @@ collections:
   - name: articoli
     label: Articoli
     label_singular: Articolo
-    description: Gli articoli del blog (Generale, Arte, Sport, Cucina, Finanza). Ogni articolo pubblicato va online in un paio di minuti.
+    description: Gli articoli del blog (Generale, Arte, Sport, Cucina, Finanza). Un articolo nuovo nasce come bozza (offline); quando attivi "Online" e salvi, compare sul sito in un paio di minuti.
     folder: _posts
     create: true
     delete: true
     # Jekyll vuole i nomi file AAAA-MM-GG-titolo.md; l'indirizzo sul sito sarà /blog/titolo.html
     slug: "{{date | date('YYYY-MM-DD')}}-{{slug}}"
-    summary: "{{title}} · {{categories}} · {{date | date('D/M/YYYY')}} · {{autore}}"
+    summary: "{{published | ternary('Online', 'Bozza')}} · {{title}} · {{categories}} · {{date | date('D/M/YYYY')}} · {{autore}}"
     sortable_fields: [date, title, autore]
+    view_filters:
+      - { label: Bozze (offline), field: published, pattern: false }
+      - { label: Online, field: published, pattern: true }
     fields:
+      # published è il campo di Jekyll: con false l'articolo non viene pubblicato (non ha pagina e non compare
+      # negli elenchi), ma il file resta nel repository e si può rimettere online in qualsiasi momento.
+      - name: published
+        label: Online
+        widget: boolean
+        default: false
+        hint: "Spento = bozza: l'articolo è salvato ma non compare sul sito. Accendilo e salva per pubblicarlo; spegnilo per toglierlo dal sito senza cancellarlo."
       - name: title
         label: Titolo
         widget: string

@@ -1,4 +1,5 @@
 ---
+published: true
 title: Articolo di prova
 evidenzia: prova
 lead: Vediamo se funziona questo strumento

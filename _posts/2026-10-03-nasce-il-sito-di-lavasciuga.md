@@ -1,4 +1,5 @@
 ---
+published: true
 title: "Si apre l'oblò: nasce il sito di Lavasciuga"
 evidenzia: nasce il sito
 lead: "Dopo più di cinquanta puntate, Lavasciuga ha finalmente una casa tutta sua: un posto dove ascoltare il podcast, leggere gli articoli della redazione e dei collaboratori e, perché no, unirsi a noi."
