@@ -9,6 +9,10 @@ autore: redazione-lavasciuga
 copertina: /assets/blog/goodVibration.jpg
 copertina_alt: 45 giri di Good Vibration
 episodio: ''
+link:
+  - titolo: The Beach Boys - Good Vibrations
+    url: https://www.youtube.com/watch?v=apBWI6xrbLY
+    nota: Ascolta il brano
 ---
 
 Il 10 ottobre 1966 i Beach Boys pubblicano un singolo che dura poco più di tre minuti e mezzo. Per registrarlo ci erano voluti mesi di lavoro, quattro studi di Hollywood e una cifra che all'epoca fece impressione: si parla di circa 50.000 dollari, più di un intero album di quegli anni. Il pezzo si chiama "Good Vibrations". Sessant'anni dopo è ancora lì, fra le canzoni che chiunque si occupi di produzione musicale prima o poi deve studiare.
