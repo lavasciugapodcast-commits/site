@@ -29,4 +29,5 @@ exclude:
   - README.md
   - CLAUDE.md
   - media/
+  - caroselli/        # caroselli Instagram: strumenti di lavoro, non pagine del sito
   - .claude/

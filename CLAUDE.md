@@ -39,6 +39,7 @@ js/main.js        Menu mobile, voce attiva, anno nel footer, tema chiaro/scuro
 js/podcast.js     Player audio del podcast + elenco episodi (solo index e podcast)
 assets/           Logo ridimensionato (logo-64/192/512.png); assets/blog/ e assets/autori/ immagini dal pannello
 media/            Originali ad alta risoluzione (logo 2048px): non linkarli dalle pagine
+caroselli/        Caroselli Instagram in HTML (esclusi dal sito pubblicato, vedi _config.yml)
 ```
 
 ## Layout e stile
@@ -120,6 +121,17 @@ media/            Originali ad alta risoluzione (logo 2048px): non linkarli dall
   lo corregge in `../assets/blog/...` (il sito sta in una sottocartella finché non c'è il dominio).
 - Primo articolo vero: `2026-10-03-nasce-il-sito-di-lavasciuga.md` (Generale). Gli articoli `2026-10-01-ciclo-delicato.md`
   e `2026-10-02-articolo-di-prova.md` (Generale) sono esempi (il primo marcato TODO): vanno sostituiti o cancellati.
+
+## Caroselli Instagram
+
+- Un file HTML per carosello in `caroselli/` (es. `2026-10-03-nasce-il-sito.html`), escluso dal sito pubblicato.
+  Si apre direttamente dal file: slide 1080×1350 con lo stile del sito, logo incorporato (una volta, variabile `--logo`).
+- In ogni slide in alto "Lavasciuga" e il numero (01 / 07); in basso l'acqua turchese che sale slide dopo slide
+  (`--h` sulla `.slide`; lo spazio del testo si adatta, `.body` ha `padding-bottom: calc(var(--h) + 110px)`).
+- "Scarica PNG" esporta le slide con html-to-image (da jsDelivr, serve la connessione); "Vista ridotta" le mostra
+  affiancate. In alternativa: plugin di cattura del browser in "Dimensione reale".
+- Per un carosello nuovo: copiare il file e cambiare i testi delle `<section class="slide">`; ricontrollare che il testo
+  non finisca sotto l'acqua nelle slide con più contenuto.
 
 ## Autori e box "Chi è l'autore"
 
